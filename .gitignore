@@ -1,0 +1,6 @@
+target/
+.*/
+.*
+
+!.clang-format
+!.gitignore
