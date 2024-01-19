@@ -25,7 +25,7 @@ namespace lgt
          *
          */
         template <class... Args>
-        Array(Item memory[], u32 length, Args... args);
+        Array(void* memory, u32 length, Args... args);
 
         /**
          *

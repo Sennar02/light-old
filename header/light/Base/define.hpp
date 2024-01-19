@@ -65,22 +65,27 @@ namespace lgt
     static const u32 g_len_f32 = sizeof(f32);
     static const u32 g_len_f64 = sizeof(f64);
 
-    template <class Type, class Else>
+    template <class Succ, class Fail>
     class Result;
 
-    template <class Type>
-    using Option = Result<Type, bool>;
+    template <class Succ>
+    using Option = Result<Succ, bool>;
 
-    template <class Type>
+    template <class Item>
     class Vec2d;
 
     class String;
 } // namespace lgt
 
+// clang-format off
 #define LGT_STRING(str) \
     lgt::String { str, sizeof(str) - 1u }
 
 #define LGT_AS_STRING(val) \
     LGT_STRING(#val)
+
+#define LGT_UNDEF(type, item) \
+    union { type item; }
+// clang-format on
 
 #endif // LIGHT_BASE_DEFINE_HPP

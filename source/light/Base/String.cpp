@@ -44,4 +44,18 @@ namespace lgt
 
         return 0;
     }
+
+    bool
+    String::operator==(const String& other) const
+    {
+        if ( m_length != other.m_length )
+            return false;
+
+        for ( u32 i = 0; i < m_length; i++ ) {
+            if ( m_memory[i] != other.m_memory[i] )
+                return false;
+        }
+
+        return true;
+    }
 } // namespace lgt

@@ -61,11 +61,10 @@ namespace lgt
     u32
     PoolOrigin::assures(u8 align) const
     {
-        if ( align != g_len_u8 )
-            return 0;
-
-        if ( m_count != 0 )
-            return m_page - g_len_head;
+        if ( align == g_len_u8 ) {
+            if ( m_count != 0 )
+                return m_page - g_len_head;
+        }
 
         return 0;
     }
@@ -109,10 +108,8 @@ namespace lgt
         if ( addr != 0 ) {
             head->info.used = true;
 
-            length = m_page - g_len_head;
-
             return (char*)
-                memset(addr, 0, length);
+                memset(addr, 0, page());
         }
 
         return err::NotEnoughMemory;

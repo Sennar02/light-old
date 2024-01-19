@@ -22,10 +22,19 @@ namespace lgt
     ceil(Type value, Else other);
 
     template <class Type>
-    struct Hash {
+    struct Hash
+    {
         constexpr static u32
         code(const Type& value);
     };
+
+    template <class Type>
+    struct Compare
+    {
+        constexpr static bool
+        equals(const Type& value, const Type& other);
+    };
+
 } // namespace lgt
 
 #include <light/Base/inline/math.inl>

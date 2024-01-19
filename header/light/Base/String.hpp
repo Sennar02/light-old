@@ -39,6 +39,12 @@ namespace lgt
         char
         operator[](u32 index) const;
 
+        /**
+         *
+         */
+        bool
+        operator==(const String& other) const;
+
     private:
         /**
          *

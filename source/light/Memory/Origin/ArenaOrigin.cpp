@@ -31,8 +31,10 @@ namespace lgt
     void
     ArenaOrigin::reset()
     {
+        m_border = m_memory;
+
         if ( m_memory != 0 )
-            m_border = (char*) memset(m_memory, 0, m_length);
+            memset(m_memory, 0, m_length);
     }
 
     Result<char*, err::Acquire>

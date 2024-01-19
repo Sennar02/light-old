@@ -1,25 +1,25 @@
-#include <light/Base/Vect2d.hpp>
+#include <light/Base/Vec2d.hpp>
 
 namespace lgt
 {
     template <class Type>
-    Vect2d<Type>::Vect2d()
+    Vec2d<Type>::Vec2d()
         : m_memory {}
     { }
 
     template <class Type>
-    Vect2d<Type>::Vect2d(const Type& x, const Type& y)
+    Vec2d<Type>::Vec2d(const Type& x, const Type& y)
         : m_memory {x, y}
     { }
 
     template <class Type>
-    Vect2d<Type>::Vect2d(const Type& x)
+    Vec2d<Type>::Vec2d(const Type& x)
         : m_memory {x, x}
     { }
 
     template <class Type>
     Type
-    Vect2d<Type>::operator[](u32 index) const
+    Vec2d<Type>::operator[](u32 index) const
     {
         if ( index < s_size )
             return m_memory[index];
@@ -29,8 +29,8 @@ namespace lgt
 
     template <class Type>
     template <class Othr>
-    Vect2d<Type>
-    Vect2d<Type>::operator+(const Vect2d<Othr>& other) const
+    Vec2d<Type>
+    Vec2d<Type>::operator+(const Vec2d<Othr>& other) const
     {
         return {
             m_memory[0] + other.m_memory[0],
@@ -40,8 +40,8 @@ namespace lgt
 
     template <class Type>
     template <class Othr>
-    Vect2d<Type>
-    Vect2d<Type>::operator+(const Othr& other) const
+    Vec2d<Type>
+    Vec2d<Type>::operator+(const Othr& other) const
     {
         return {
             m_memory[0] + other,
@@ -51,8 +51,8 @@ namespace lgt
 
     template <class Type>
     template <class Othr>
-    Vect2d<Type>
-    Vect2d<Type>::operator*(const Vect2d<Othr>& other) const
+    Vec2d<Type>
+    Vec2d<Type>::operator*(const Vec2d<Othr>& other) const
     {
         return {
             m_memory[0] * other.m_memory[0],
@@ -62,8 +62,8 @@ namespace lgt
 
     template <class Type>
     template <class Othr>
-    Vect2d<Type>
-    Vect2d<Type>::operator*(const Othr& other) const
+    Vec2d<Type>
+    Vec2d<Type>::operator*(const Othr& other) const
     {
         return {
             m_memory[0] * other,
@@ -73,8 +73,8 @@ namespace lgt
 
     template <class Type>
     template <class Othr>
-    Vect2d<Type>
-    Vect2d<Type>::operator-(const Vect2d<Othr>& other) const
+    Vec2d<Type>
+    Vec2d<Type>::operator-(const Vec2d<Othr>& other) const
     {
         return {
             m_memory[0] - other.m_memory[0],
@@ -84,8 +84,8 @@ namespace lgt
 
     template <class Type>
     template <class Othr>
-    Vect2d<Type>
-    Vect2d<Type>::operator-(const Othr& other) const
+    Vec2d<Type>
+    Vec2d<Type>::operator-(const Othr& other) const
     {
         return {
             m_memory[0] - other,
@@ -95,8 +95,8 @@ namespace lgt
 
     template <class Type>
     template <class Othr>
-    Vect2d<Type>
-    Vect2d<Type>::operator/(const Vect2d<Othr>& other) const
+    Vec2d<Type>
+    Vec2d<Type>::operator/(const Vec2d<Othr>& other) const
     {
         return {
             m_memory[0] / other.m_memory[0],
@@ -106,8 +106,8 @@ namespace lgt
 
     template <class Type>
     template <class Othr>
-    Vect2d<Type>
-    Vect2d<Type>::operator/(const Othr& other) const
+    Vec2d<Type>
+    Vec2d<Type>::operator/(const Othr& other) const
     {
         return {
             m_memory[0] / other,

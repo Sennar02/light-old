@@ -1,12 +1,12 @@
-#ifndef LIGHT_BASE_VECT_2D_HPP
-#define LIGHT_BASE_VECT_2D_HPP
+#ifndef LIGHT_BASE_VEC_2D_HPP
+#define LIGHT_BASE_VEC_2D_HPP
 
 #include <light/Base/define.hpp>
 
 namespace lgt
 {
     template <class Type>
-    class Vect2d
+    class Vec2d
     {
     public:
         /**
@@ -18,17 +18,17 @@ namespace lgt
         /**
          *
          */
-        Vect2d();
+        Vec2d();
 
         /**
          *
          */
-        Vect2d(const Type& x, const Type& y);
+        Vec2d(const Type& x, const Type& y);
 
         /**
          *
          */
-        Vect2d(const Type& x);
+        Vec2d(const Type& x);
 
         /**
          *
@@ -40,56 +40,56 @@ namespace lgt
          *
          */
         template <class Othr>
-        Vect2d<Type>
-        operator+(const Vect2d<Othr>& other) const;
+        Vec2d<Type>
+        operator+(const Vec2d<Othr>& other) const;
 
         /**
          *
          */
         template <class Othr>
-        Vect2d<Type>
+        Vec2d<Type>
         operator+(const Othr& other) const;
 
         /**
          *
          */
         template <class Othr>
-        Vect2d<Type>
-        operator*(const Vect2d<Othr>& other) const;
+        Vec2d<Type>
+        operator*(const Vec2d<Othr>& other) const;
 
         /**
          *
          */
         template <class Othr>
-        Vect2d<Type>
+        Vec2d<Type>
         operator*(const Othr& other) const;
 
         /**
          *
          */
         template <class Othr>
-        Vect2d<Type>
-        operator-(const Vect2d<Othr>& other) const;
+        Vec2d<Type>
+        operator-(const Vec2d<Othr>& other) const;
 
         /**
          *
          */
         template <class Othr>
-        Vect2d<Type>
+        Vec2d<Type>
         operator-(const Othr& other) const;
 
         /**
          *
          */
         template <class Othr>
-        Vect2d<Type>
-        operator/(const Vect2d<Othr>& other) const;
+        Vec2d<Type>
+        operator/(const Vec2d<Othr>& other) const;
 
         /**
          *
          */
         template <class Othr>
-        Vect2d<Type>
+        Vec2d<Type>
         operator/(const Othr& other) const;
 
     private:
@@ -99,9 +99,11 @@ namespace lgt
         Type m_memory[s_size];
     };
 
-    using Vect2u = Vect2d<u32>;
-    using Vect2i = Vect2d<i32>;
-    using Vect2f = Vect2d<f32>;
+    using Vec2u = Vec2d<u32>;
+    using Vec2i = Vec2d<i32>;
+    using Vec2f = Vec2d<f32>;
 } // namespace lgt
 
-#endif // LIGHT_BASE_VECT_2D_HPP
+#include <light/Base/inline/Vec2d.inl>
+
+#endif // LIGHT_BASE_VEC_2D_HPP

@@ -27,14 +27,13 @@ namespace lgt
     floor(Type value, Else other)
     {
         return value / other;
-
     }
 
     template <class Type, class Else>
     constexpr Type
     ceil(Type value, Else other)
     {
-        if ( value % other != 0)
+        if ( value % other != 0 )
             return value / other + 1;
 
         return value / other;
@@ -121,5 +120,12 @@ namespace lgt
         }
 
         return res;
+    }
+
+    template <class Type>
+    constexpr bool
+    Compare<Type>::equals(const Type& value, const Type& other)
+    {
+        return value == other;
     }
 } // namespace lgt

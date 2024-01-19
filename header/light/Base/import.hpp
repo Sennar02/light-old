@@ -6,7 +6,7 @@
 #include <light/Base/Result.hpp>
 
 #include <light/Base/math.hpp>
-#include <light/Base/Vect2d.hpp>
+#include <light/Base/Vec2d.hpp>
 #include <light/Base/String.hpp>
 
 #include <light/Base/util.hpp>

@@ -1,1 +1,131 @@
-DisableFormat: true
+---
+DisableFormat: false
+
+# Project
+Language:                   Cpp
+Standard:                   c++17
+ColumnLimit:                0
+IndentWidth:                4
+TabWidth:                   4
+UseTab:                     Never
+UseCRLF:                    false
+DeriveLineEnding:           false
+DerivePointerAlignment:     false
+PointerAlignment:           Left
+ReferenceAlignment:         Pointer
+MaxEmptyLinesToKeep:        1
+SeparateDefinitionBlocks:   Always
+ReflowComments:             false
+
+# Namespace
+NamespaceIndentation:   All
+CompactNamespaces:      false
+FixNamespaceComments:   true
+ShortNamespaceLines:    0
+
+# Indentation
+AccessModifierOffset:               -4
+IndentAccessModifiers:              false
+IndentCaseBlocks:                   false
+IndentCaseLabels:                   true
+IndentExternBlock:                  Indent
+IndentGotoLabels:                   true
+IndentPPDirectives:                 BeforeHash
+PPIndentWidth:                      4
+IndentRequires:                     true
+IndentWrappedFunctionNames:         false
+ConstructorInitializerIndentWidth:  4
+ContinuationIndentWidth:            4
+LambdaBodyIndentation:              Signature
+
+# Alignment
+AlignAfterOpenBracket:          DontAlign
+AlignArrayOfStructures:         Right
+AlignConsecutiveAssignments:    Consecutive
+AlignConsecutiveBitFields:      Consecutive
+AlignConsecutiveDeclarations:   Consecutive
+AlignConsecutiveMacros:         Consecutive
+AlignEscapedNewlines:           Right
+AlignOperands:                  Align
+AlignTrailingComments:          true
+
+# Permissions
+AllowAllArgumentsOnNextLine:                true
+AllowAllParametersOfDeclarationOnNextLine:  false
+AllowShortBlocksOnASingleLine:              true
+AllowShortCaseLabelsOnASingleLine:          true
+AllowShortEnumsOnASingleLine:               true
+AllowShortIfStatementsOnASingleLine:        AllIfsAndElse
+AllowShortLoopsOnASingleLine:               false
+AllowShortFunctionsOnASingleLine:           All
+AllowShortLambdasOnASingleLine:             All
+
+# Break lines
+AlwaysBreakAfterReturnType:         All
+AlwaysBreakTemplateDeclarations:    Yes
+BreakBeforeConceptDeclarations:     true
+BreakBeforeBinaryOperators:         None
+BreakBeforeTernaryOperators:        true
+AlwaysBreakBeforeMultilineStrings:  false
+BreakStringLiterals:                true
+BreakConstructorInitializers:       BeforeComma
+BreakInheritanceList:               BeforeComma
+BreakBeforeBraces:                  Custom
+BraceWrapping:
+    IndentBraces:           false
+    AfterControlStatement:  Never
+    AfterClass:             true
+    AfterStruct:            true
+    AfterUnion:             true
+    AfterEnum:              true
+    BeforeWhile:            false
+    BeforeElse:             false
+    AfterNamespace:         true
+    BeforeLambdaBody:       false
+    AfterCaseLabel:         false
+    AfterExternBlock:       true
+    AfterFunction:          true
+    BeforeCatch:            true
+    SplitEmptyFunction:     false
+    SplitEmptyRecord:       false
+    SplitEmptyNamespace:    false
+BinPackArguments:                   false
+BinPackParameters:                  false
+PackConstructorInitializers:        Never
+EmptyLineAfterAccessModifier:       Never
+EmptyLineBeforeAccessModifier:      Always
+KeepEmptyLinesAtTheStartOfBlocks:   false
+
+# Spaces
+SpaceBeforeAssignmentOperators:     true
+SpaceAfterTemplateKeyword:          true
+SpaceAfterCStyleCast:               true
+SpaceAfterLogicalNot:               false
+SpaceAroundPointerQualifiers:       Default
+SpaceBeforeCaseColon:               false
+Cpp11BracedListStyle:               true
+SpaceBeforeCpp11BracedList:         true
+SpaceBeforeCtorInitializerColon:    true
+SpaceBeforeInheritanceColon:        true
+SpaceBeforeParens:                  ControlStatements
+SpaceBeforeRangeBasedForLoopColon:  true
+SpaceBeforeSquareBrackets:          false
+SpaceInEmptyBlock:                  true
+SpaceInEmptyParentheses:            false
+SpacesBeforeTrailingComments:       1
+SpacesInAngles:                     Never
+SpacesInCStyleCastParentheses:      false
+SpacesInConditionalStatement:       true
+SpacesInLineCommentPrefix:
+    Minimum: 1
+    Maximum: 1
+SpacesInParentheses:                false
+SpacesInSquareBrackets:             false
+BitFieldColonSpacing:               Both
+
+# Others
+IncludeBlocks:          Merge
+SortIncludes:           Never
+SortUsingDeclarations:  false
+InsertTrailingCommas:   Wrapped
+...

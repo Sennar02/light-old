@@ -1,4 +1,4 @@
-#include <light/Memory/import.hpp>
+#include <light/Algo/import.hpp>
 #include <stdio.h>
 
 using namespace lgt;
@@ -8,21 +8,19 @@ static char g_memory[g_KiB] = {0};
 int
 main(int, const char*[])
 {
-    PoolOrigin origin = {g_memory, 72u, 64u};
+    ArenaOrigin origin = {g_memory, g_KiB};
 
-    u32   length = origin.assures(2u);
-    auto  result = origin.acquire(length);
-    char* memory = result.value(0);
+    HashTable<String, int> table = {origin, 8u};
 
-    if (result.is_error() == true) {
-        printf("[\x1b[31mERR\x1b[0m]: %s\n",
-            err::g_acquire[result.error()]);
+    printf("%u\n", table.insert(LGT_STRING("Hello"), 5).is_succ());
+    printf("%u\n", table.insert(LGT_STRING("Main"), 4).is_succ());
+    printf("%u\n", table.insert(LGT_STRING("Function"), 8).is_succ());
 
-        return 1;
-    } else
-        printf("%p, %u\n",
-            memory,
-            origin.release(memory).is_value());
+    table
+        .for_each([](int& x, const String& y) {
+            printf("%s := %i\n", y.memory(), x);
+        })
+        .clear();
 
     return 0;
 }

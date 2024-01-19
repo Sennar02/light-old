@@ -3,56 +3,61 @@
 
 namespace lgt
 {
-    template <class Type, class Else>
+    template <class Succ, class Fail>
     class Result
     {
     public:
         /**
          *
          */
-        Result(const Type& value);
+        Result(const Succ& succ);
 
         /**
          *
          */
-        Result(Else error);
-
-        /**
-         *
-         */
-        bool
-        is_value() const;
+        Result(const Fail& fail);
 
         /**
          *
          */
         bool
-        is_error() const;
+        is_succ() const;
 
         /**
          *
          */
-        template <class Item, class... Rest>
         bool
-        is_error(Item error, Rest... other) const;
+        is_succ(const Succ& succ) const;
 
         /**
          *
          */
-        const Type&
-        value(const Type& deflt) const;
+        bool
+        is_fail() const;
 
         /**
          *
          */
-        Type&
-        value(Type& deflt) const;
+        bool
+        is_fail(const Fail& fail) const;
 
         /**
          *
          */
-        Else
-        error() const;
+        const Succ&
+        succ(const Succ& deflt) const;
+
+        /**
+         *
+         */
+        Succ&
+        succ(Succ& deflt);
+
+        /**
+         *
+         */
+        Fail
+        fail() const;
 
     private:
         union
@@ -60,12 +65,88 @@ namespace lgt
             /**
              *
              */
-            Type m_value;
+            Succ m_succ;
 
             /**
              *
              */
-            Else m_error;
+            Fail m_fail;
+        };
+
+        /**
+         *
+         */
+        bool m_valid;
+    };
+
+    template <class Succ, class Fail>
+    class Result<Succ&, Fail>
+    {
+    public:
+        /**
+         *
+         */
+        Result(Succ& succ);
+
+        /**
+         *
+         */
+        Result(const Fail& fail);
+
+        /**
+         *
+         */
+        bool
+        is_succ() const;
+
+        /**
+         *
+         */
+        bool
+        is_succ(const Succ& succ) const;
+
+        /**
+         *
+         */
+        bool
+        is_fail() const;
+
+        /**
+         *
+         */
+        bool
+        is_fail(const Fail& fail) const;
+
+        /**
+         *
+         */
+        const Succ&
+        succ(const Succ& deflt) const;
+
+        /**
+         *
+         */
+        Succ&
+        succ(Succ& deflt);
+
+        /**
+         *
+         */
+        Fail
+        fail() const;
+
+    private:
+        union
+        {
+            /**
+             *
+             */
+            Succ* m_succ;
+
+            /**
+             *
+             */
+            Fail m_fail;
         };
 
         /**

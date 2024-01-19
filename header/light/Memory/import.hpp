@@ -6,14 +6,15 @@
 #include <light/Memory/Origin/BaseOrigin.hpp>
 #include <light/Memory/Origin/KernOrigin.hpp>
 #include <light/Memory/Origin/PoolOrigin.hpp>
-// #include <light/Memory/Origin/TreeOrigin.hpp>
+#include <light/Memory/Origin/TreeOrigin.hpp>
 #include <light/Memory/Origin/ArenaOrigin.hpp>
-// #include <light/Memory/Origin/StackOrigin.hpp>
+#include <light/Memory/Origin/StackOrigin.hpp>
 #include <light/Memory/Origin/EmptyOrigin.hpp>
 
 #include <light/Memory/Layout/FixedLayout.hpp>
 
 #include <light/Memory/Array.hpp>
+#include <light/Memory/Array2d.hpp>
 
 #include <light/Memory/util.hpp>
 

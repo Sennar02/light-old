@@ -10,7 +10,7 @@ namespace lgt
 
     template <class Item, class Layout>
     template <class... Args>
-    Array<Item, Layout>::Array(Item memory[], u32 length, Args... args)
+    Array<Item, Layout>::Array(void* memory, u32 length, Args... args)
         : m_layout {memory, length, s_size, forw<Args>(args)...}
     { }
 
