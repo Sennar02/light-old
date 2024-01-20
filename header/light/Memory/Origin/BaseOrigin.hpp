@@ -62,13 +62,13 @@ namespace lgt
         /**
          *
          */
-        virtual Result<char*, err::Acquire>
+        virtual Result<char*, fail::Acquire>
         acquire(u32 length, u8 align = g_len_u32) = 0;
 
         /**
          *
          */
-        virtual Result<bool, err::Release>
+        virtual Result<bool, fail::Release>
         release(void* memory) = 0;
 
     protected:

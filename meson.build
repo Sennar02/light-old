@@ -14,13 +14,16 @@ light_define = []
 
 subdir('source/light/Base')
 subdir('source/light/Memory')
+subdir('source/light/Engine')
 
 executable('light-main',
     sources: [
         'source/light-main.cpp',
     ],
     include_directories: [light_header],
-    dependencies:        [light_depend],
+    dependencies:        [light_depend,
+        dependency('sfml-graphics'),
+    ],
     link_with:           [light_define],
     link_args:           ['-lm'],
 )

@@ -23,18 +23,18 @@ namespace lgt
     KernOrigin::reset()
     { }
 
-    Result<char*, err::Acquire>
+    Result<char*, fail::Acquire>
     KernOrigin::acquire(u32 length, u8 align)
     {
         if ( is_power_of_two(align) == false )
-            return err::AlignmentFiasco;
+            return fail::AlignmentFiasco;
 
-        if ( length == 0 ) return err::NoByteRequested;
+        if ( length == 0 ) return fail::NoByteRequested;
 
         return (char*) calloc(1u, length);
     }
 
-    Result<bool, err::Release>
+    Result<bool, fail::Release>
     KernOrigin::release(void* memory)
     {
         free(memory);

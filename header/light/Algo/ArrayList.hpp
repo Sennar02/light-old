@@ -1,48 +1,35 @@
-#ifndef LIGHT_ALGO_HASH_TABLE_HPP
-#define LIGHT_ALGO_HASH_TABLE_HPP
+#ifndef LIGHT_ALGO_ARRAY_LIST_HPP
+#define LIGHT_ALGO_ARRAY_LIST_HPP
 
 #include <light/Algo/define.hpp>
 
 namespace lgt
 {
-    template <class Name, class Item>
-    struct HashElem
+    template <class Item, class Layout = FixedLayout>
+    class ArrayList
     {
-        LGT_UNDEF(Name, name);
-        LGT_UNDEF(Item, item);
-
-        u32 hash = 0;
-        u32 dist = 1u;
-    };
-
-    template <class Name, class Item, class Layout = FixedLayout>
-    class HashTable
-    {
-    public:
-        using Elem = HashElem<Name, Item>;
-
     public:
         /**
          *
          */
-        HashTable();
+        ArrayList();
 
         /**
          *
          */
         template <class... Args>
-        HashTable(const Array<Elem, Layout>& array, Args... args);
+        ArrayList(const Array<Item, Layout>& array, Args... args);
 
         /**
          *
          */
         template <class... Args>
-        HashTable(Args... args);
+        ArrayList(Args... args);
 
         /**
          *
          */
-        virtual ~HashTable() = default;
+        virtual ~ArrayList() = default;
 
         /**
          *
@@ -71,83 +58,58 @@ namespace lgt
         /**
          *
          */
-        u32
-        index_of(const Name& name) const;
-
-        /**
-         *
-         */
-        bool
-        contains(const Name& name) const;
-
-        /**
-         *
-         */
         template <class Iter, class Func>
-        HashTable&
+        ArrayList&
         for_each(Iter& iter, Func func);
 
         /**
          *
          */
         template <class Func>
-        HashTable&
+        ArrayList&
         for_each(Func func);
 
         /**
          *
          */
         Result<bool, fail::Insert>
-        insert(const Name& name, const Item& item);
+        insert(const Item& item, u32 index = g_max_u32);
 
         /**
          *
          */
         Result<Item, fail::Remove>
-        remove(const Name& name);
+        remove(u32 index = g_max_u32);
 
         /**
          *
          */
-        HashTable&
+        ArrayList&
         clear();
 
         /**
          *
          */
         Option<Item&>
-        find(const Name& name) const;
+        find(u32 index) const;
 
         /**
          *
          */
         Item&
-        operator[](const Name& name) const;
+        operator[](u32 index) const;
 
         /**
          *
          */
-        const Array<Elem, Layout>&
+        const Array<Item, Layout>&
         array() const;
-
-    private:
-        /**
-         *
-         */
-        u32
-        code(const Name& name) const;
-
-        /**
-         *
-         */
-        u32
-        next(u32 code, u32 step = 1u) const;
 
     protected:
         /**
          *
          */
-        Array<Elem, Layout> m_array;
+        Array<Item, Layout> m_array;
 
         /**
          *
@@ -155,23 +117,23 @@ namespace lgt
         u32 m_count;
     };
 
-    template <class Name, class Item, class Layout>
-    class HashTableForwIter
+    template <class Item, class Layout>
+    class ArrayListForwIter
     {
     private:
-        using Table = HashTable<Name, Item, Layout>;
+        using List = ArrayList<Item, Layout>;
 
     public:
         /**
          *
          */
-        HashTableForwIter(const Table& table);
+        ArrayListForwIter(const List& list);
 
         /**
          *
          */
-        const Name&
-        name() const;
+        u32
+        index() const;
 
         /**
          *
@@ -207,7 +169,7 @@ namespace lgt
         /**
          *
          */
-        const Table& m_table;
+        const List& m_list;
 
         /**
          *
@@ -215,11 +177,11 @@ namespace lgt
         u32 m_index;
     };
 
-    template <class Name, class Item, class Layout>
-    HashTableForwIter(const HashTable<Name, Item, Layout>&)
-        -> HashTableForwIter<Name, Item, Layout>;
+    template <class Item, class Layout>
+    ArrayListForwIter(const ArrayList<Item, Layout>&)
+        -> ArrayListForwIter<Item, Layout>;
 } // namespace lgt
 
-#include <light/Algo/inline/HashTable.inl>
+#include <light/Algo/inline/ArrayList.inl>
 
-#endif // LIGHT_ALGO_HASH_TABLE_HPP
+#endif // LIGHT_ALGO_ARRAY_LIST_HPP

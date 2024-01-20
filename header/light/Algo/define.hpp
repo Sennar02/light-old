@@ -5,7 +5,7 @@
 
 namespace lgt
 {
-    namespace err
+    namespace fail
     {
         enum Insert
         {
@@ -21,12 +21,20 @@ namespace lgt
         enum Remove
         {
             UnknownElement,
+            AlreadyRemoved,
         };
 
         static const char* const g_remove[] = {
             LGT_AS_STRING(Remove::UnknownElement).memory(),
+            LGT_AS_STRING(Remove::AlreadyRemoved).memory(),
         };
-    } // namespace err
+    } // namespace fail
+
+    template <class Item, class Layout>
+    class ArrayList;
+
+    template <class Item, class Layout>
+    class ArrayDeque;
 
     template <class Name, class Item, class Layout>
     class HashTable;

@@ -20,23 +20,23 @@ namespace lgt
     EmptyOrigin::reset()
     { }
 
-    Result<char*, err::Acquire>
+    Result<char*, fail::Acquire>
     EmptyOrigin::acquire(u32 length, u8 align)
     {
         if ( is_power_of_two(align) == false )
-            return err::AlignmentFiasco;
+            return fail::AlignmentFiasco;
 
-        if ( length == 0 ) return err::NoByteRequested;
+        if ( length == 0 ) return fail::NoByteRequested;
 
         return 0;
     }
 
-    Result<bool, err::Release>
+    Result<bool, fail::Release>
     EmptyOrigin::release(void* memory)
     {
         if ( memory == 0 )
             return true;
 
-        return err::NotMemoryParent;
+        return fail::NotMemoryParent;
     }
 } // namespace lgt

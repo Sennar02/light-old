@@ -37,7 +37,7 @@ namespace lgt
             memset(m_memory, 0, m_length);
     }
 
-    Result<char*, err::Acquire>
+    Result<char*, fail::Acquire>
     ArenaOrigin::acquire(u32 length, u8 align)
     {
         u32 pref = round(m_border, align);
@@ -46,9 +46,9 @@ namespace lgt
         char* next = addr + length;
 
         if ( is_power_of_two(align) == false )
-            return err::AlignmentFiasco;
+            return fail::AlignmentFiasco;
 
-        if ( length == 0 ) return err::NoByteRequested;
+        if ( length == 0 ) return fail::NoByteRequested;
 
         if ( next <= m_memory + m_length ) {
             m_border = next;
@@ -57,15 +57,15 @@ namespace lgt
                 memset(addr, 0, length);
         }
 
-        return err::NotEnoughMemory;
+        return fail::NotEnoughMemory;
     }
 
-    Result<bool, err::Release>
+    Result<bool, fail::Release>
     ArenaOrigin::release(void* memory)
     {
         if ( memory == 0 )
             return true;
 
-        return err::NotMemoryParent;
+        return fail::NotMemoryParent;
     }
 } // namespace lgt

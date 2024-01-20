@@ -1,48 +1,44 @@
-#ifndef LIGHT_ALGO_HASH_TABLE_HPP
-#define LIGHT_ALGO_HASH_TABLE_HPP
+#ifndef LIGHT_ALGO_ARRAY_DEQUE_HPP
+#define LIGHT_ALGO_ARRAY_DEQUE_HPP
 
 #include <light/Algo/define.hpp>
 
 namespace lgt
 {
-    template <class Name, class Item>
-    struct HashElem
+    namespace algo
     {
-        LGT_UNDEF(Name, name);
-        LGT_UNDEF(Item, item);
+        enum DequeSide
+        {
+            Head,
+            Tail,
+        };
+    } // namespace algo
 
-        u32 hash = 0;
-        u32 dist = 1u;
-    };
-
-    template <class Name, class Item, class Layout = FixedLayout>
-    class HashTable
+    template <class Item, class Layout = FixedLayout>
+    class ArrayDeque
     {
-    public:
-        using Elem = HashElem<Name, Item>;
-
     public:
         /**
          *
          */
-        HashTable();
+        ArrayDeque();
 
         /**
          *
          */
         template <class... Args>
-        HashTable(const Array<Elem, Layout>& array, Args... args);
+        ArrayDeque(const Array<Item, Layout>& array, Args... args);
 
         /**
          *
          */
         template <class... Args>
-        HashTable(Args... args);
+        ArrayDeque(Args... args);
 
         /**
          *
          */
-        virtual ~HashTable() = default;
+        virtual ~ArrayDeque() = default;
 
         /**
          *
@@ -71,72 +67,54 @@ namespace lgt
         /**
          *
          */
-        u32
-        index_of(const Name& name) const;
-
-        /**
-         *
-         */
-        bool
-        contains(const Name& name) const;
-
-        /**
-         *
-         */
         template <class Iter, class Func>
-        HashTable&
+        ArrayDeque&
         for_each(Iter& iter, Func func);
 
         /**
          *
          */
         template <class Func>
-        HashTable&
+        ArrayDeque&
         for_each(Func func);
 
         /**
          *
          */
         Result<bool, fail::Insert>
-        insert(const Name& name, const Item& item);
+        insert(const Item& item);
 
         /**
          *
          */
         Result<Item, fail::Remove>
-        remove(const Name& name);
+        remove(algo::DequeSide side);
 
         /**
          *
          */
-        HashTable&
+        ArrayDeque&
         clear();
 
         /**
          *
          */
         Option<Item&>
-        find(const Name& name) const;
+        find(u32 index) const;
 
         /**
          *
          */
         Item&
-        operator[](const Name& name) const;
+        operator[](u32 index) const;
 
         /**
          *
          */
-        const Array<Elem, Layout>&
+        const Array<Item, Layout>&
         array() const;
 
     private:
-        /**
-         *
-         */
-        u32
-        code(const Name& name) const;
-
         /**
          *
          */
@@ -147,7 +125,12 @@ namespace lgt
         /**
          *
          */
-        Array<Elem, Layout> m_array;
+        Array<Item, Layout> m_array;
+
+        /**
+         *
+         */
+        u32 m_delta;
 
         /**
          *
@@ -155,23 +138,23 @@ namespace lgt
         u32 m_count;
     };
 
-    template <class Name, class Item, class Layout>
-    class HashTableForwIter
+    template <class Item, class Layout>
+    class ArrayDequeForwIter
     {
     private:
-        using Table = HashTable<Name, Item, Layout>;
+        using Deque = ArrayDeque<Item, Layout>;
 
     public:
         /**
          *
          */
-        HashTableForwIter(const Table& table);
+        ArrayDequeForwIter(const Deque& deque);
 
         /**
          *
          */
-        const Name&
-        name() const;
+        u32
+        index() const;
 
         /**
          *
@@ -207,7 +190,7 @@ namespace lgt
         /**
          *
          */
-        const Table& m_table;
+        const Deque& m_deque;
 
         /**
          *
@@ -215,11 +198,11 @@ namespace lgt
         u32 m_index;
     };
 
-    template <class Name, class Item, class Layout>
-    HashTableForwIter(const HashTable<Name, Item, Layout>&)
-        -> HashTableForwIter<Name, Item, Layout>;
+    template <class Item, class Layout>
+    ArrayDequeForwIter(const ArrayList<Item, Layout>&)
+        -> ArrayDequeForwIter<Item, Layout>;
 } // namespace lgt
 
-#include <light/Algo/inline/HashTable.inl>
+#include <light/Algo/inline/ArrayDeque.inl>
 
-#endif // LIGHT_ALGO_HASH_TABLE_HPP
+#endif // LIGHT_ALGO_ARRAY_DEQUE_HPP

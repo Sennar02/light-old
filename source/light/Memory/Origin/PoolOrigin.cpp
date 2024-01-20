@@ -94,16 +94,16 @@ namespace lgt
         reset(m_page - g_len_head);
     }
 
-    Result<char*, err::Acquire>
+    Result<char*, fail::Acquire>
     PoolOrigin::acquire(u32 length, u8 align)
     {
         char* addr = (char*) remove(length);
         Head* head = (Head*) (addr - g_len_head);
 
         if ( align != g_len_u8 )
-            return err::AlignmentFiasco;
+            return fail::AlignmentFiasco;
 
-        if ( length == 0 ) return err::NoByteRequested;
+        if ( length == 0 ) return fail::NoByteRequested;
 
         if ( addr != 0 ) {
             head->info.used = true;
@@ -112,16 +112,16 @@ namespace lgt
                 memset(addr, 0, page());
         }
 
-        return err::NotEnoughMemory;
+        return fail::NotEnoughMemory;
     }
 
-    Result<char*, err::Acquire>
+    Result<char*, fail::Acquire>
     PoolOrigin::acquire()
     {
         return acquire(m_page - g_len_head);
     }
 
-    Result<bool, err::Release>
+    Result<bool, fail::Release>
     PoolOrigin::release(void* memory)
     {
         char* addr = (char*) memory;
@@ -129,14 +129,14 @@ namespace lgt
 
         if ( memory != 0 ) {
             if ( accepts(memory) == false )
-                return err::NotMemoryParent;
+                return fail::NotMemoryParent;
 
             if ( head->info.used ) {
                 head->info.used = false;
 
                 insert(addr);
             } else
-                return err::AlreadyReleased;
+                return fail::AlreadyReleased;
         }
 
         return true;

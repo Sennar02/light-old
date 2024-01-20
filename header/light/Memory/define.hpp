@@ -16,7 +16,7 @@ namespace lgt
     class StackOrigin;
     class EmptyOrigin;
 
-    namespace err
+    namespace fail
     {
         enum Acquire
         {
@@ -41,7 +41,7 @@ namespace lgt
             LGT_AS_STRING(Release::AlreadyReleased).memory(),
             LGT_AS_STRING(Release::NotMemoryParent).memory(),
         };
-    } // namespace err
+    } // namespace fail
 
     /**
      * Memory layouts which are responsible
