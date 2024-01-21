@@ -4,21 +4,16 @@ namespace lgt
 {
     template <class Name, class Item, class Layout>
     HashTable<Name, Item, Layout>::HashTable()
-        : m_array {}
-        , m_count {0}
-    { }
-
-    template <class Name, class Item, class Layout>
-    template <class... Args>
-    HashTable<Name, Item, Layout>::HashTable(const Array<Elem, Layout>& array, Args... args)
-        : m_array {array, args...}
+        : m_heads {}
+        , m_array {}
         , m_count {0}
     { }
 
     template <class Name, class Item, class Layout>
     template <class... Args>
     HashTable<Name, Item, Layout>::HashTable(Args... args)
-        : m_array {args...}
+        : m_heads {args...}
+        , m_array {args...}
         , m_count {0}
     { }
 
@@ -26,7 +21,7 @@ namespace lgt
     u32
     HashTable<Name, Item, Layout>::size() const
     {
-        return m_array.length();
+        return m_heads.length();
     }
 
     template <class Name, class Item, class Layout>
@@ -40,7 +35,7 @@ namespace lgt
     bool
     HashTable<Name, Item, Layout>::is_full() const
     {
-        return m_count == m_array.length();
+        return m_count == m_heads.length();
     }
 
     template <class Name, class Item, class Layout>
@@ -55,15 +50,17 @@ namespace lgt
     HashTable<Name, Item, Layout>::index_of(const Name& name) const
     {
         u32   hash = code(name);
-        Elem* iter = 0;
+        Head* iter = 0;
+        Body* pair = 0;
 
         if ( is_empty() ) return g_max_u32;
 
         for ( u32 i = hash; hash != next(i); i = next(i) ) {
-            iter = &m_array[i];
+            iter = &m_heads[i];
+            pair = &m_array[iter->link];
 
             if ( iter->dist != 0 && iter->hash == hash ) {
-                if ( Compare<Name>::equals(iter->name, name) == true )
+                if ( Compare<Name>::equals(pair->name, name) )
                     return i;
             }
         }
@@ -77,7 +74,7 @@ namespace lgt
     {
         u32 index = index_of(name);
 
-        if ( index < m_array.length() )
+        if ( index < m_heads.length() )
             return true;
 
         return false;
@@ -88,47 +85,58 @@ namespace lgt
     HashTable<Name, Item, Layout>::insert(const Name& name, const Item& item)
     {
         u32   hash = code(name);
-        Elem* iter = 0;
-        Elem  elem = {name, item, hash};
+        Head* iter = 0;
+        Body* pair = 0;
+        Head  head = {hash, m_count};
+        Body  body = {name, item, hash};
 
         if ( is_full() ) return fail::NotEnoughSpace;
 
         for ( u32 i = hash; true; i = next(i) ) {
-            iter = &m_array[i];
+            iter = &m_heads[i];
+            pair = &m_array[iter->link];
+
+            m_array[head.link].link = i;
 
             if ( iter->dist != 0 && iter->hash == hash ) {
-                if ( Compare<Name>::equals(iter->name, name) == true )
+                if ( Compare<Name>::equals(pair->name, name) )
                     return fail::NameRepetition;
             }
 
-            if ( iter->dist < elem.dist ) {
+            if ( iter->dist < head.dist ) {
                 if ( iter->dist == 0 ) {
-                    ctor(m_array[i], elem);
+                    if ( head.link == m_count ) body.link = i;
+
+                    ctor(m_heads[i], head);
+                    ctor(m_array[m_count], body);
 
                     m_count += 1u;
 
                     return true;
                 }
 
-                swap(m_array[i], elem);
+                swap(m_heads[i], head);
+                swap(m_array[head.link].link, body.link);
             }
 
-            elem.dist += 1u;
+            head.dist += 1u;
         }
     }
 
     template <class Name, class Item, class Layout>
     Result<Item, fail::Remove>
-    HashTable<Name, Item, Layout>::remove(const Name& name)
+    HashTable<Name, Item, Layout>::remove(const Name&)
     {
-        u32 index = index_of(name);
+        // u32 index = index_of(name);
 
-        if ( index < m_array.length() )
-            m_array[index].dist = 0;
-        else
-            return fail::UnknownElement;
+        // if ( index < m_array.length() )
+        //     m_array[index].dist = 0;
+        // else
+        //     return fail::UnknownElement;
 
-        return m_array[index].item;
+        // return m_array[index].item;
+
+        return fail::UnknownElement;
     }
 
     template <class Name, class Item, class Layout>
@@ -170,21 +178,28 @@ namespace lgt
     {
         u32 index = index_of(name);
 
-        if ( index < m_array.length() )
-            return m_array[index].item;
+        if ( index < m_heads.length() )
+            return m_array[m_heads[index].link].item;
 
         return true;
     }
 
     template <class Name, class Item, class Layout>
-    Item&
+    Option<Item&>
     HashTable<Name, Item, Layout>::operator[](const Name& name) const
     {
-        return m_array[index_of(name)].item;
+        return find(name);
     }
 
     template <class Name, class Item, class Layout>
-    const Array<HashElem<Name, Item>, Layout>&
+    const Array<HashHead, Layout>&
+    HashTable<Name, Item, Layout>::heads() const
+    {
+        return m_heads;
+    }
+
+    template <class Name, class Item, class Layout>
+    const Array<HashBody<Name, Item>, Layout>&
     HashTable<Name, Item, Layout>::array() const
     {
         return m_array;
@@ -240,12 +255,10 @@ namespace lgt
     bool
     HashTableForwIter<Name, Item, Layout>::has_next() const
     {
-        u32 i = m_index + 1u;
+        u32 next = m_index + 1u;
 
-        for ( ; i < m_table.size(); i++ ) {
-            if ( m_table.array()[i].dist != 0 )
-                return true;
-        }
+        if ( next < m_table.count() )
+            return true;
 
         return false;
     }
@@ -254,14 +267,12 @@ namespace lgt
     bool
     HashTableForwIter<Name, Item, Layout>::next()
     {
-        m_index += 1u;
+        u32 next = m_index + 1u;
 
-        for ( ; m_index < m_table.size(); m_index++ ) {
-            if ( m_table.array()[m_index].dist != 0 )
-                return true;
-        }
+        if ( next < m_table.count() )
+            m_index = next;
 
-        return false;
+        return m_index == next;
     }
 
     template <class Name, class Item, class Layout>

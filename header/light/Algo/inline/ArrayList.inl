@@ -132,10 +132,10 @@ namespace lgt
     }
 
     template <class Item, class Layout>
-    Item&
+    Option<Item&>
     ArrayList<Item, Layout>::operator[](u32 index) const
     {
-        return m_array[index];
+        return find(index);
     }
 
     template <class Item, class Layout>

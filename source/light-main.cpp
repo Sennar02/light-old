@@ -1,78 +1,75 @@
-#include <light/Engine/import.hpp>
+#include <light/Algo/import.hpp>
+#include <time.h>
 #include <stdio.h>
 
 using namespace lgt;
 
-class WindowSystem
-    : public System
+template <class Item, class Layout>
+void
+print_table(const HashTable<Item, Layout>& table)
 {
-public:
-    WindowSystem()
-        : m_window {}
-    { }
+    auto& heads = table.heads();
+    auto& array = table.array();
 
-    bool
-    accept(void*)
-    {
-        return true;
+    for ( u32 i = 0; i < table.size(); i++ ) {
+        if ( heads[i].dist != 0 )
+            printf("%3u. \x1b[34mdist %3u, link %3u => %3u => %3u\x1b[0m ",
+                i,
+                heads[i].dist,
+                heads[i].link,
+                array[heads[i].link].link,
+                heads[array[heads[i].link].link].link);
+        else
+            printf("%3u. \x1b[33mdist ---, link -----------------\x1b[0m ", i);
+
+        if ( i < table.count() )
+            printf("| \x1b[34mlink %3u => %3u => %3u, name %3u, item %3u\x1b[0m\n",
+                array[i].link,
+                heads[array[i].link].link,
+                array[heads[array[i].link].link].link,
+                array[i].name,
+                array[i].item);
+        else
+            printf("| \x1b[33mlink -----------------, name ---, item ---\x1b[0m\n");
     }
+}
 
-    void
-    enter()
-    {
-        m_window.create(sf::VideoMode {1280, 720}, "Light");
-        m_window.clear();
-    }
-
-    void
-    after_step()
-    {
-        sf::Event event;
-
-        while ( m_window.pollEvent(event) ) {
-            if ( event.type == sf::Event::Closed )
-                // send exit event
-                exit(0);
-
-            if ( event.type == sf::Event::KeyReleased ) {
-                if ( event.key.code == sf::Keyboard::Escape )
-                    // send exit event
-                    exit(0);
-            }
-        }
-
-        m_window.display();
-        m_window.clear();
-    }
-
-private:
-    sf::RenderWindow m_window;
-};
+static const u32 g_count = 8u;
 
 int
 main(int, const char*[])
 {
-    // Engine       game;
-    // WindowSystem window;
+    ArenaOrigin origin = {calloc(1u, g_MiB), g_MiB};
 
-    // game.insert(window);
-    // game.loop();
+    HashTable<u32, u32> table = {origin, g_count};
 
-    EntityManager list;
+    srand(time(0));
 
-    Entity def;
-    auto   entity = list.acquire();
+    printf("Populating...\n");
 
-    if ( entity.is_fail() )
-        return 1;
+    for ( u32 i = 0; i < g_count * 1.5f; i++ ) {
+        u32  name   = rand() % (g_count * 2u);
+        u32  item   = rand() % (g_count * 2u);
+        auto result = table.insert(name, item);
 
-    def = entity.succ(def);
+        if ( result.is_succ() )
+            printf("\x1b[32msuccess from (%3u, %3u)\x1b[0m\n", name, item);
+        else
+            printf("\x1b[31mfailure from (%3u, %3u): %s\x1b[0m\n",
+                name,
+                item,
+                fail::g_insert[result.fail()]);
+    }
 
-    printf("%u, %u\n",
-        def.identif(),
-        def.version());
+    printf("\nTable state:\n");
 
-    printf("%u\n", list.release(def).is_succ());
+    print_table(table);
+
+    printf("\nFor each loop:\n");
+
+    table.for_each([](u32& item, const u32& name) {
+        printf("%3u := %3u\n", name, item);
+    });
 
     return 0;
 }

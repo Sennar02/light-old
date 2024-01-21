@@ -5,33 +5,34 @@
 
 namespace lgt
 {
+    struct HashHead
+    {
+        u32 hash = 0;
+        u32 link = 0;
+        u32 dist = 1u;
+    };
+
     template <class Name, class Item>
-    struct HashElem
+    struct HashBody
     {
         LGT_UNDEF(Name, name);
         LGT_UNDEF(Item, item);
 
-        u32 hash = 0;
-        u32 dist = 1u;
+        u32 link = 0;
     };
 
     template <class Name, class Item, class Layout = FixedLayout>
     class HashTable
     {
     public:
-        using Elem = HashElem<Name, Item>;
+        using Head = HashHead;
+        using Body = HashBody<Name, Item>;
 
     public:
         /**
          *
          */
         HashTable();
-
-        /**
-         *
-         */
-        template <class... Args>
-        HashTable(const Array<Elem, Layout>& array, Args... args);
 
         /**
          *
@@ -121,13 +122,19 @@ namespace lgt
         /**
          *
          */
-        Item&
+        Option<Item&>
         operator[](const Name& name) const;
 
         /**
          *
          */
-        const Array<Elem, Layout>&
+        const Array<Head, Layout>&
+        heads() const;
+
+        /**
+         *
+         */
+        const Array<Body, Layout>&
         array() const;
 
     private:
@@ -147,7 +154,12 @@ namespace lgt
         /**
          *
          */
-        Array<Elem, Layout> m_array;
+        Array<Head, Layout> m_heads;
+
+        /**
+         *
+         */
+        Array<Body, Layout> m_array;
 
         /**
          *

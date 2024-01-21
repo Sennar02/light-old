@@ -96,7 +96,7 @@ namespace lgt
         /**
          *
          */
-        Item&
+        Option<Item&>
         operator[](u32 index) const;
 
         /**
