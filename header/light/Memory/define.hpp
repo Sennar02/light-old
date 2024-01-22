@@ -73,6 +73,8 @@ namespace lgt
     static const u32 g_KB = 1000u;
     static const u32 g_MB = g_KB * g_KB;
     static const u32 g_GB = g_MB * g_KB;
+
+    extern ArenaOrigin g_origin;
 } // namespace lgt
 
 #endif // LIGHT_MEMORY_DEFINE_HPP

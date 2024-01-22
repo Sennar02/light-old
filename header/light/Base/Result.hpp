@@ -3,14 +3,19 @@
 
 namespace lgt
 {
-    template <class Succ, class Fail>
+    template <class Item, class Fail>
     class Result
     {
     public:
         /**
          *
          */
-        Result(const Succ& succ);
+        Result();
+
+        /**
+         *
+         */
+        Result(const Item& item);
 
         /**
          *
@@ -21,13 +26,13 @@ namespace lgt
          *
          */
         bool
-        is_succ() const;
+        is_item() const;
 
         /**
          *
          */
         bool
-        is_succ(const Succ& succ) const;
+        is_item(const Item& item) const;
 
         /**
          *
@@ -44,90 +49,20 @@ namespace lgt
         /**
          *
          */
-        const Succ&
-        succ(const Succ& deflt) const;
+        const Item&
+        item(const Item& item) const;
 
         /**
          *
          */
-        Succ&
-        succ(Succ& deflt);
+        Item&
+        item(Item& item);
 
         /**
          *
          */
-        Fail
-        fail() const;
-
-    private:
-        union
-        {
-            /**
-             *
-             */
-            Succ m_succ;
-
-            /**
-             *
-             */
-            Fail m_fail;
-        };
-
-        /**
-         *
-         */
-        bool m_valid;
-    };
-
-    template <class Succ, class Fail>
-    class Result<Succ&, Fail>
-    {
-    public:
-        /**
-         *
-         */
-        Result(Succ& succ);
-
-        /**
-         *
-         */
-        Result(const Fail& fail);
-
-        /**
-         *
-         */
-        bool
-        is_succ() const;
-
-        /**
-         *
-         */
-        bool
-        is_succ(const Succ& succ) const;
-
-        /**
-         *
-         */
-        bool
-        is_fail() const;
-
-        /**
-         *
-         */
-        bool
-        is_fail(const Fail& fail) const;
-
-        /**
-         *
-         */
-        const Succ&
-        succ(const Succ& deflt) const;
-
-        /**
-         *
-         */
-        Succ&
-        succ(Succ& deflt);
+        Item&
+        item();
 
         /**
          *
@@ -136,18 +71,15 @@ namespace lgt
         fail() const;
 
     private:
-        union
-        {
-            /**
-             *
-             */
-            Succ* m_succ;
+        /**
+         *
+         */
+        LGT_UNDEF(Item, m_item);
 
-            /**
-             *
-             */
-            Fail m_fail;
-        };
+        /**
+         *
+         */
+        LGT_UNDEF(Fail, m_fail);
 
         /**
          *

@@ -90,13 +90,13 @@ namespace lgt
         /**
          *
          */
-        Option<Item&>
+        Item&
         find(u32 index) const;
 
         /**
          *
          */
-        Option<Item&>
+        Item&
         operator[](u32 index) const;
 
         /**

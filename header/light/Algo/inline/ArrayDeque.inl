@@ -120,20 +120,20 @@ namespace lgt
     }
 
     template <class Item, class Layout>
-    Option<Item&>
+    Item&
     ArrayDeque<Item, Layout>::find(u32 index) const
     {
-        if ( index < m_count )
-            return m_array[next(m_delta, index)];
+        // if ( index < m_count )
+        return m_array[next(m_delta, index)];
 
-        return true;
+        // return true;
     }
 
     template <class Item, class Layout>
     Item&
     ArrayDeque<Item, Layout>::operator[](u32 index) const
     {
-        return m_array[next(m_delta, index)];
+        return find(index);
     }
 
     template <class Item, class Layout>

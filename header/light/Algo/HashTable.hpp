@@ -116,13 +116,13 @@ namespace lgt
         /**
          *
          */
-        Option<Item&>
+        Item&
         find(const Name& name) const;
 
         /**
          *
          */
-        Option<Item&>
+        Item&
         operator[](const Name& name) const;
 
         /**

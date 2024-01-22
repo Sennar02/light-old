@@ -105,10 +105,9 @@ namespace lgt
 
             if ( iter->dist < head.dist ) {
                 if ( iter->dist == 0 ) {
-                    if ( head.link == m_count ) body.link = i;
-
                     ctor(m_heads[i], head);
-                    ctor(m_array[m_count], body);
+                    ctor(m_array[m_count].name, body.name);
+                    ctor(m_array[m_count].item, body.item);
 
                     m_count += 1u;
 
@@ -173,19 +172,19 @@ namespace lgt
     }
 
     template <class Name, class Item, class Layout>
-    Option<Item&>
+    Item&
     HashTable<Name, Item, Layout>::find(const Name& name) const
     {
         u32 index = index_of(name);
 
-        if ( index < m_heads.length() )
-            return m_array[m_heads[index].link].item;
+        // if ( index < m_heads.length() )
+        return m_array[m_heads[index].link].item;
 
-        return true;
+        // return true;
     }
 
     template <class Name, class Item, class Layout>
-    Option<Item&>
+    Item&
     HashTable<Name, Item, Layout>::operator[](const Name& name) const
     {
         return find(name);

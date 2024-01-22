@@ -99,7 +99,7 @@ namespace lgt
         /**
          *
          */
-        Option<Item&>
+        Item&
         find(u32 index) const;
 
         /**

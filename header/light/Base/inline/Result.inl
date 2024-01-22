@@ -2,45 +2,50 @@
 
 namespace lgt
 {
-    template <class Succ, class Fail>
-    Result<Succ, Fail>::Result(const Succ& succ)
-        : m_succ {succ}
+    template <class Item, class Fail>
+    Result<Item, Fail>::Result()
+        : m_valid {false}
+    { }
+
+    template <class Item, class Fail>
+    Result<Item, Fail>::Result(const Item& item)
+        : m_item {item}
         , m_valid {true}
     { }
 
-    template <class Succ, class Fail>
-    Result<Succ, Fail>::Result(const Fail& fail)
+    template <class Item, class Fail>
+    Result<Item, Fail>::Result(const Fail& fail)
         : m_fail {fail}
         , m_valid {false}
     { }
 
-    template <class Succ, class Fail>
+    template <class Item, class Fail>
     bool
-    Result<Succ, Fail>::is_succ() const
+    Result<Item, Fail>::is_item() const
     {
         return m_valid;
     }
 
-    template <class Succ, class Fail>
+    template <class Item, class Fail>
     bool
-    Result<Succ, Fail>::is_succ(const Succ& succ) const
+    Result<Item, Fail>::is_item(const Item& item) const
     {
-        if ( m_valid && m_succ == succ )
+        if ( m_valid && m_item == item )
             return true;
 
         return false;
     }
 
-    template <class Succ, class Fail>
+    template <class Item, class Fail>
     bool
-    Result<Succ, Fail>::is_fail() const
+    Result<Item, Fail>::is_fail() const
     {
         return m_valid == false;
     }
 
-    template <class Succ, class Fail>
+    template <class Item, class Fail>
     bool
-    Result<Succ, Fail>::is_fail(const Fail& fail) const
+    Result<Item, Fail>::is_fail(const Fail& fail) const
     {
         if ( m_valid || m_fail != fail )
             return false;
@@ -48,105 +53,36 @@ namespace lgt
         return true;
     }
 
-    template <class Succ, class Fail>
-    const Succ&
-    Result<Succ, Fail>::succ(const Succ& deflt) const
+    template <class Item, class Fail>
+    const Item&
+    Result<Item, Fail>::item(const Item& item) const
     {
         if ( m_valid )
-            return m_succ;
+            return m_item;
 
-        return deflt;
+        return item;
     }
 
-    template <class Succ, class Fail>
-    Succ&
-    Result<Succ, Fail>::succ(Succ& deflt)
+    template <class Item, class Fail>
+    Item&
+    Result<Item, Fail>::item(Item& item)
     {
         if ( m_valid )
-            return m_succ;
+            return m_item;
 
-        return deflt;
+        return item;
     }
 
-    template <class Succ, class Fail>
+    template <class Item, class Fail>
+    Item&
+    Result<Item, Fail>::item()
+    {
+        return m_item;
+    }
+
+    template <class Item, class Fail>
     Fail
-    Result<Succ, Fail>::fail() const
-    {
-        if ( m_valid )
-            return {};
-
-        return m_fail;
-    }
-
-    template <class Succ, class Fail>
-    Result<Succ&, Fail>::Result(Succ& succ)
-        : m_succ {&succ}
-        , m_valid {true}
-    { }
-
-    template <class Succ, class Fail>
-    Result<Succ&, Fail>::Result(const Fail& fail)
-        : m_fail {fail}
-        , m_valid {false}
-    { }
-
-    template <class Succ, class Fail>
-    bool
-    Result<Succ&, Fail>::is_succ() const
-    {
-        return m_valid;
-    }
-
-    template <class Succ, class Fail>
-    bool
-    Result<Succ&, Fail>::is_succ(const Succ& succ) const
-    {
-        if ( m_valid && *m_succ == succ )
-            return true;
-
-        return false;
-    }
-
-    template <class Succ, class Fail>
-    bool
-    Result<Succ&, Fail>::is_fail() const
-    {
-        return m_valid == false;
-    }
-
-    template <class Succ, class Fail>
-    bool
-    Result<Succ&, Fail>::is_fail(const Fail& fail) const
-    {
-        if ( m_valid || *m_fail != fail )
-            return false;
-
-        return true;
-    }
-
-    template <class Succ, class Fail>
-    const Succ&
-    Result<Succ&, Fail>::succ(const Succ& deflt) const
-    {
-        if ( m_valid )
-            return *m_succ;
-
-        return deflt;
-    }
-
-    template <class Succ, class Fail>
-    Succ&
-    Result<Succ&, Fail>::succ(Succ& deflt)
-    {
-        if ( m_valid )
-            return *m_succ;
-
-        return deflt;
-    }
-
-    template <class Succ, class Fail>
-    Fail
-    Result<Succ&, Fail>::fail() const
+    Result<Item, Fail>::fail() const
     {
         if ( m_valid )
             return {};

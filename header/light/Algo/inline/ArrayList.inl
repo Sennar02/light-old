@@ -122,17 +122,17 @@ namespace lgt
     }
 
     template <class Item, class Layout>
-    Option<Item&>
+    Item&
     ArrayList<Item, Layout>::find(u32 index) const
     {
-        if ( index < m_array.length() )
-            return m_array[index];
+        // if ( index < m_array.length() )
+        return m_array[index];
 
-        return true;
+        // return true;
     }
 
     template <class Item, class Layout>
-    Option<Item&>
+    Item&
     ArrayList<Item, Layout>::operator[](u32 index) const
     {
         return find(index);

@@ -2,6 +2,8 @@
 
 namespace lgt
 {
+    ArenaOrigin g_origin = {calloc(1u, g_KiB * 16u), g_KiB * 16u};
+
     ArenaOrigin::ArenaOrigin()
         : BaseOrigin()
         , m_border {0}

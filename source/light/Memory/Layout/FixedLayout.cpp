@@ -3,7 +3,7 @@
 namespace lgt
 {
     FixedLayout::FixedLayout(BaseOrigin& origin, u32 items, u32 scale)
-        : FixedLayout(origin.acquire(items * scale).succ(0), items, scale)
+        : FixedLayout(origin.acquire(items * scale).item(0), items, scale)
     { }
 
     FixedLayout::FixedLayout(void* memory, u32 items, u32 scale)
