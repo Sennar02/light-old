@@ -3,7 +3,7 @@
 
 #include <light/Engine/depend.hpp>
 
-namespace lgt
+namespace lgh
 {
     class Engine;
 
@@ -12,7 +12,6 @@ namespace lgt
 
     template <class Type>
     class EntityInfo;
-
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_ENGINE_DEFINE_HPP

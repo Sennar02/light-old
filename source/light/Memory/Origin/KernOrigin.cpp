@@ -1,6 +1,6 @@
 #include <light/Memory/Origin/KernOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     KernOrigin::KernOrigin()
         : BaseOrigin()
@@ -41,4 +41,4 @@ namespace lgt
 
         return true;
     }
-} // namespace lgt
+} // namespace lgh

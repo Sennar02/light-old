@@ -1,6 +1,6 @@
 #include <light/Engine/EntityInfo.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Type>
     EntityInfo<Type>
@@ -25,4 +25,4 @@ namespace lgt
 
         return {info.index + (info.epoch << bits)};
     }
-} // namespace lgt
+} // namespace lgh

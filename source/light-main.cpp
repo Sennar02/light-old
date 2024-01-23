@@ -1,30 +1,70 @@
-#include <light/Engine/import.hpp>
+#include <light/Algo/import.hpp>
+#include <time.h>
 #include <stdio.h>
 
-using namespace lgt;
+using namespace lgh;
+
+template <class Item, class Layout>
+void
+print_table(const HashTable<Item, Layout>& table)
+{
+    auto& heads = table.heads();
+    auto& array = table.array();
+
+    for ( u32 i = 0; i < heads.length(); i++ ) {
+        if ( heads[i].dist != 0 ) {
+            if ( heads[i].link == heads[array[heads[i].link].link].link )
+                printf("%3u. \x1b[34mdist %3u, link %3u\x1b[0m ",
+                    i,
+                    heads[i].dist,
+                    heads[i].link);
+            else
+                printf("%3u. \x1b[31mdist %3u, link %3u\x1b[0m ",
+                    i,
+                    heads[i].dist,
+                    heads[i].link);
+        } else
+            printf("%3u. \x1b[33mdist ---, link ---\x1b[0m ", i);
+
+        if ( i < table.count() ) {
+            if ( array[i].link == array[heads[array[i].link].link].link )
+                printf("| \x1b[34mlink %3u, name %3u, item %3u\x1b[0m\n",
+                    array[i].link,
+                    array[i].name,
+                    array[i].item);
+            else
+                printf("| \x1b[31mlink %3u, name %3u, item %3u\x1b[0m\n",
+                    array[i].link,
+                    array[i].name,
+                    array[i].item);
+        } else
+            printf("| \x1b[33mlink ---, name ---, item ---\x1b[0m\n");
+    }
+}
+
+static const u32 g_count = 48u;
 
 int
 main(int, const char*[])
 {
-    EntityFactory<u32> factory = {g_origin, 256u};
+    HashTable<u32, u32> table;
 
-    u32 count = EntityTraits<u32>::s_whole_bits -
-                EntityTraits<u32>::s_index_bits;
+    Array<HashHead>           heads = {g_origin, g_count * 2u};
+    Array<HashBody<u32, u32>> array = {g_origin, g_count};
 
-    for ( u32 i = 0; i < (1u << count) + 1; i++ ) {
-        auto result = factory.acquire();
-        auto entity = result.item();
+    if ( table.build(heads, array) == false )
+        return 1;
 
-        if ( result.is_fail() )
-            break;
+    srand(time(0));
 
-        printf("entity(%10u) = {index %8u, epoch %3u}\n",
-            entity,
-            decode(entity).index,
-            decode(entity).epoch);
+    for ( u32 i = 0; i < g_count * 1.5f; i++ ) {
+        u32 name = rand() % (g_count * 3u);
+        u32 item = rand() % (g_count * 3u);
 
-        factory.release(entity);
+        table.insert(name, item);
     }
+
+    print_table(table);
 
     return 0;
 }

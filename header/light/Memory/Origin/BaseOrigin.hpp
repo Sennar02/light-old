@@ -3,7 +3,7 @@
 
 #include <light/Memory/define.hpp>
 
-namespace lgt
+namespace lgh
 {
     class BaseOrigin
     {
@@ -82,6 +82,6 @@ namespace lgt
          */
         u32 m_length;
     };
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_MEMORY_ORIGIN_BASE_ORIGIN_HPP

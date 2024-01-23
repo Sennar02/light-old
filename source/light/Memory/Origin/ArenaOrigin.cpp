@@ -1,8 +1,8 @@
 #include <light/Memory/Origin/ArenaOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
-    ArenaOrigin g_origin = {calloc(1u, g_KiB * 16u), g_KiB * 16u};
+    ArenaOrigin g_origin = {calloc(1u, g_KiB * 256u), g_KiB * 256u};
 
     ArenaOrigin::ArenaOrigin()
         : BaseOrigin()
@@ -70,4 +70,4 @@ namespace lgt
 
         return fail::NotMemoryParent;
     }
-} // namespace lgt
+} // namespace lgh

@@ -3,7 +3,7 @@
 
 #include <light/Memory/define.hpp>
 
-namespace lgt
+namespace lgh
 {
     /**
      *
@@ -16,6 +16,6 @@ namespace lgt
      */
     bool
     is_power_of_two(u8 align);
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_MEMORY_UTIL_HPP

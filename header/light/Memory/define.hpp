@@ -3,7 +3,7 @@
 
 #include <light/Memory/depend.hpp>
 
-namespace lgt
+namespace lgh
 {
     /**
      *
@@ -75,6 +75,6 @@ namespace lgt
     static const u32 g_GB = g_MB * g_KB;
 
     extern ArenaOrigin g_origin;
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_MEMORY_DEFINE_HPP

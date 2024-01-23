@@ -1,6 +1,6 @@
 #include <light/Base/Vec2d.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Type>
     Vec2d<Type>::Vec2d()
@@ -114,4 +114,4 @@ namespace lgt
             m_memory[1] / other,
         };
     }
-} // namespace lgt
+} // namespace lgh

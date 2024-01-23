@@ -1,6 +1,6 @@
 #include <light/Algo/ArrayDeque.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Item, class Layout>
     ArrayDeque<Item, Layout>::ArrayDeque()
@@ -55,8 +55,8 @@ namespace lgt
 
     template <class Item, class Layout>
     template <class Iter, class Func>
-    ArrayDeque<Item, Layout>&
-    ArrayDeque<Item, Layout>::for_each(Iter& iter, Func func)
+    const ArrayDeque<Item, Layout>&
+    ArrayDeque<Item, Layout>::for_each(Iter& iter, Func func) const
     {
         while ( iter.next() )
             func(iter.item(), iter.index());
@@ -66,8 +66,8 @@ namespace lgt
 
     template <class Item, class Layout>
     template <class Func>
-    ArrayDeque<Item, Layout>&
-    ArrayDeque<Item, Layout>::for_each(Func func)
+    const ArrayDeque<Item, Layout>&
+    ArrayDeque<Item, Layout>::for_each(Func func) const
     {
         ArrayDequeForwIter iter = {*this};
 
@@ -75,6 +75,46 @@ namespace lgt
             func(iter.item(), iter.index());
 
         return *this;
+    }
+
+    template <class Item, class Layout>
+    template <class... Args>
+    bool
+    ArrayDeque<Item, Layout>::build(const Array<Item, Layout>& array, Args... args)
+    {
+        if ( reset() == false )
+            return false;
+
+        ctor(m_array, array, args...);
+
+        return true;
+    }
+
+    template <class Item, class Layout>
+    template <class... Args>
+    bool
+    ArrayDeque<Item, Layout>::build(Args... args)
+    {
+        if ( reset() == false )
+            return false;
+
+        ctor(m_array, args...);
+
+        return true;
+    }
+
+    template <class Item, class Layout>
+    bool
+    ArrayDeque<Item, Layout>::reset()
+    {
+        bool result = m_array.resize(0);
+
+        if ( result ) {
+            m_delta = 0;
+            m_count = 0;
+        }
+
+        return result;
     }
 
     template <class Item, class Layout>
@@ -120,20 +160,40 @@ namespace lgt
     }
 
     template <class Item, class Layout>
-    Item&
-    ArrayDeque<Item, Layout>::find(u32 index) const
+    Item*
+    ArrayDeque<Item, Layout>::search(u32 index) const
     {
-        // if ( index < m_count )
-        return m_array[next(m_delta, index)];
+        if ( index < m_count )
+            return &m_array[next(m_delta, index)];
 
-        // return true;
+        return 0;
+    }
+
+    template <class Item, class Layout>
+    Item&
+    ArrayDeque<Item, Layout>::find(u32 index, Item& fail) const
+    {
+        if ( index < m_count )
+            return m_array[next(m_delta, index)];
+
+        return fail;
+    }
+
+    template <class Item, class Layout>
+    const Item&
+    ArrayDeque<Item, Layout>::find(u32 index, const Item& fail) const
+    {
+        if ( index < m_count )
+            return m_array[next(m_delta, index)];
+
+        return fail;
     }
 
     template <class Item, class Layout>
     Item&
     ArrayDeque<Item, Layout>::operator[](u32 index) const
     {
-        return find(index);
+        return *search(index);
     }
 
     template <class Item, class Layout>
@@ -212,4 +272,4 @@ namespace lgt
     {
         m_index = g_max_u32;
     }
-} // namespace lgt
+} // namespace lgh

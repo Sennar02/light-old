@@ -4,9 +4,9 @@
 #include <light/Memory/util.hpp>
 #include <light/Memory/Origin/BaseOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     // todo: implement TreeOrigin.
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_MEMORY_ORIGIN_TREE_ORIGIN_HPP

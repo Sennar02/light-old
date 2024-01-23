@@ -4,7 +4,7 @@
 #include <light/Memory/util.hpp>
 #include <light/Memory/Origin/BaseOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     class PoolOrigin
         : public BaseOrigin
@@ -103,6 +103,6 @@ namespace lgt
          */
         u32 m_page;
     };
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_MEMORY_ORIGIN_POOL_ORIGIN_HPP

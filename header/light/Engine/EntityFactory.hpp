@@ -4,7 +4,7 @@
 #include <light/Engine/define.hpp>
 #include <light/Engine/EntityInfo.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Item>
     class EntityFactory
@@ -57,7 +57,7 @@ namespace lgt
          */
         u32 m_count;
     };
-} // namespace lgt
+} // namespace lgh
 
 #include <light/Engine/inline/EntityFactory.inl>
 

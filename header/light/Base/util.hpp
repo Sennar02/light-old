@@ -3,7 +3,7 @@
 
 #include <light/Base/traits.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Type>
     constexpr RemoveRef<Type>&&
@@ -36,7 +36,7 @@ namespace lgt
     template <class Type>
     auto
     decl() -> Type;
-} // namespace lgt
+} // namespace lgh
 
 #include <light/Base/inline/util.inl>
 

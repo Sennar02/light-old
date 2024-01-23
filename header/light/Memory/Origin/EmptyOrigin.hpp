@@ -4,7 +4,7 @@
 #include <light/Memory/util.hpp>
 #include <light/Memory/Origin/BaseOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     class EmptyOrigin
         : public BaseOrigin
@@ -44,6 +44,6 @@ namespace lgt
         virtual Result<bool, fail::Release>
         release(void* memory);
     };
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_MEMORY_ORIGIN_EMPTY_ORIGIN_HPP

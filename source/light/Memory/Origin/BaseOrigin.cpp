@@ -1,6 +1,6 @@
 #include <light/Memory/Origin/BaseOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     BaseOrigin::BaseOrigin()
         : m_memory {0}
@@ -45,4 +45,4 @@ namespace lgt
     {
         return contains(memory);
     }
-} // namespace lgt
+} // namespace lgh

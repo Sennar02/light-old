@@ -1,7 +1,14 @@
 #include <light/Memory/Array2d.hpp>
 
-namespace lgt
+namespace lgh
 {
+    template <class Item, class Layout>
+    Array2d<Item, Layout>::Array2d()
+        : Array<Item, Layout>()
+        , m_width {0}
+        , m_height {0}
+    { }
+
     template <class Item, class Layout>
     template <class Origin, class... Args>
     Array2d<Item, Layout>::Array2d(Origin& origin, u32 length, u32 width, Args... args)
@@ -101,4 +108,4 @@ namespace lgt
 
         return self.find(value);
     }
-} // namespace lgt
+} // namespace lgh

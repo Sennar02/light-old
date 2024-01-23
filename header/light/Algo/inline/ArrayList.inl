@@ -1,6 +1,6 @@
 #include <light/Algo/ArrayList.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Item, class Layout>
     ArrayList<Item, Layout>::ArrayList()
@@ -51,6 +51,68 @@ namespace lgt
     }
 
     template <class Item, class Layout>
+    template <class Iter, class Func>
+    const ArrayList<Item, Layout>&
+    ArrayList<Item, Layout>::for_each(Iter& iter, Func func) const
+    {
+        while ( iter.next() )
+            func(iter.item(), iter.index());
+
+        return *this;
+    }
+
+    template <class Item, class Layout>
+    template <class Func>
+    const ArrayList<Item, Layout>&
+    ArrayList<Item, Layout>::for_each(Func func) const
+    {
+        ArrayListForwIter iter = {*this};
+
+        while ( iter.next() )
+            func(iter.item(), iter.index());
+
+        return *this;
+    }
+
+    template <class Item, class Layout>
+    template <class... Args>
+    bool
+    ArrayList<Item, Layout>::build(const Array<Item, Layout>& array, Args... args)
+    {
+        if ( reset() == false )
+            return false;
+
+        ctor(m_array, array, args...);
+
+        return true;
+    }
+
+    template <class Item, class Layout>
+    template <class... Args>
+    bool
+    ArrayList<Item, Layout>::build(Args... args)
+    {
+        if ( reset() == false )
+            return false;
+
+        ctor(m_array, args...);
+
+        return true;
+    }
+
+    template <class Item, class Layout>
+    bool
+    ArrayList<Item, Layout>::reset()
+    {
+        bool result = m_array.resize(0);
+
+        if ( result )
+            m_count = 0;
+
+        return result;
+    }
+
+    template <class Item, class Layout>
     Result<bool, fail::Insert>
     ArrayList<Item, Layout>::insert(const Item& item, u32 index)
     {
@@ -89,30 +151,6 @@ namespace lgt
     }
 
     template <class Item, class Layout>
-    template <class Iter, class Func>
-    ArrayList<Item, Layout>&
-    ArrayList<Item, Layout>::for_each(Iter& iter, Func func)
-    {
-        while ( iter.next() )
-            func(iter.item(), iter.index());
-
-        return *this;
-    }
-
-    template <class Item, class Layout>
-    template <class Func>
-    ArrayList<Item, Layout>&
-    ArrayList<Item, Layout>::for_each(Func func)
-    {
-        ArrayListForwIter iter = {*this};
-
-        while ( iter.next() )
-            func(iter.item(), iter.index());
-
-        return *this;
-    }
-
-    template <class Item, class Layout>
     ArrayList<Item, Layout>&
     ArrayList<Item, Layout>::clear()
     {
@@ -122,20 +160,40 @@ namespace lgt
     }
 
     template <class Item, class Layout>
-    Item&
-    ArrayList<Item, Layout>::find(u32 index) const
+    Item*
+    ArrayList<Item, Layout>::search(u32 index) const
     {
-        // if ( index < m_array.length() )
-        return m_array[index];
+        if ( index < m_array.length() )
+            return &m_array[index];
 
-        // return true;
+        return 0;
+    }
+
+    template <class Item, class Layout>
+    Item&
+    ArrayList<Item, Layout>::find(u32 index, Item& fail) const
+    {
+        if ( index < m_array.length() )
+            return m_array[index];
+
+        return fail;
+    }
+
+    template <class Item, class Layout>
+    const Item&
+    ArrayList<Item, Layout>::find(u32 index, const Item& fail) const
+    {
+        if ( index < m_array.length() )
+            return m_array[index];
+
+        return fail;
     }
 
     template <class Item, class Layout>
     Item&
     ArrayList<Item, Layout>::operator[](u32 index) const
     {
-        return find(index);
+        return *search(index);
     }
 
     template <class Item, class Layout>
@@ -202,4 +260,4 @@ namespace lgt
     {
         m_index = g_max_u32;
     }
-} // namespace lgt
+} // namespace lgh

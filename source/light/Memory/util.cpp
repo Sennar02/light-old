@@ -1,6 +1,6 @@
 #include <light/Memory/util.hpp>
 
-namespace lgt
+namespace lgh
 {
     u32
     round(void* memory, u8 align, u32 extra)
@@ -22,4 +22,4 @@ namespace lgt
         return value == 0 &&
                align != 0;
     }
-} // namespace lgt
+} // namespace lgh

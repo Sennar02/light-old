@@ -3,7 +3,7 @@
 
 #include <light/Base/define.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Type, class Else = Type>
     constexpr Type
@@ -35,7 +35,7 @@ namespace lgt
         equals(const Type& value, const Type& other);
     };
 
-} // namespace lgt
+} // namespace lgh
 
 #include <light/Base/inline/math.inl>
 

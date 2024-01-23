@@ -1,11 +1,19 @@
 #include <light/Algo/HashTable.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Name, class Item, class Layout>
     HashTable<Name, Item, Layout>::HashTable()
         : m_heads {}
         , m_array {}
+        , m_count {0}
+    { }
+
+    template <class Name, class Item, class Layout>
+    template <class... Args>
+    HashTable<Name, Item, Layout>::HashTable(const Array<Head, Layout>& heads, const Array<Body, Layout>& array, Args... args)
+        : m_heads {heads, args...}
+        , m_array {array, args...}
         , m_count {0}
     { }
 
@@ -21,7 +29,10 @@ namespace lgt
     u32
     HashTable<Name, Item, Layout>::size() const
     {
-        return m_heads.length();
+        u32 size =
+            min(m_heads.length(), m_array.length());
+
+        return size;
     }
 
     template <class Name, class Item, class Layout>
@@ -35,7 +46,10 @@ namespace lgt
     bool
     HashTable<Name, Item, Layout>::is_full() const
     {
-        return m_count == m_heads.length();
+        u32 size =
+            min(m_heads.length(), m_array.length());
+
+        return m_count == size;
     }
 
     template <class Name, class Item, class Layout>
@@ -46,14 +60,14 @@ namespace lgt
     }
 
     template <class Name, class Item, class Layout>
-    u32
+    Option<u32>
     HashTable<Name, Item, Layout>::index_of(const Name& name) const
     {
         u32   hash = code(name);
         Head* iter = 0;
         Body* pair = 0;
 
-        if ( is_empty() ) return g_max_u32;
+        if ( is_empty() ) return {};
 
         for ( u32 i = hash; hash != next(i); i = next(i) ) {
             iter = &m_heads[i];
@@ -65,19 +79,87 @@ namespace lgt
             }
         }
 
-        return g_max_u32;
+        return {};
     }
 
     template <class Name, class Item, class Layout>
     bool
     HashTable<Name, Item, Layout>::contains(const Name& name) const
     {
-        u32 index = index_of(name);
+        auto option = index_of(name);
+        u32  index  = option.item();
 
-        if ( index < m_heads.length() )
-            return true;
+        if ( option.is_item() ) {
+            if ( index < m_heads.length() )
+                return true;
+        }
 
         return false;
+    }
+
+    template <class Name, class Item, class Layout>
+    template <class Iter, class Func>
+    const HashTable<Name, Item, Layout>&
+    HashTable<Name, Item, Layout>::for_each(Iter& iter, Func func) const
+    {
+        while ( iter.next() )
+            func(iter.item(), iter.name());
+
+        return *this;
+    }
+
+    template <class Name, class Item, class Layout>
+    template <class Func>
+    const HashTable<Name, Item, Layout>&
+    HashTable<Name, Item, Layout>::for_each(Func func) const
+    {
+        HashTableForwIter iter = {*this};
+
+        while ( iter.next() )
+            func(iter.item(), iter.name());
+
+        return *this;
+    }
+
+    template <class Name, class Item, class Layout>
+    template <class... Args>
+    bool
+    HashTable<Name, Item, Layout>::build(const Array<Head, Layout>& heads, const Array<Body, Layout>& array, Args... args)
+    {
+        if ( reset() == false )
+            return false;
+
+        ctor(m_heads, heads, args...);
+        ctor(m_array, array, args...);
+
+        return true;
+    }
+
+    template <class Name, class Item, class Layout>
+    template <class... Args>
+    bool
+    HashTable<Name, Item, Layout>::build(Args... args)
+    {
+        if ( reset() == false )
+            return false;
+
+        ctor(m_heads, args...);
+        ctor(m_array, args...);
+
+        return true;
+    }
+
+    template <class Name, class Item, class Layout>
+    bool
+    HashTable<Name, Item, Layout>::reset()
+    {
+        bool result = m_heads.resize(0) &&
+                      m_array.resize(0);
+
+        if ( result )
+            m_count = 0;
+
+        return result;
     }
 
     template <class Name, class Item, class Layout>
@@ -88,7 +170,7 @@ namespace lgt
         Head* iter = 0;
         Body* pair = 0;
         Head  head = {hash, m_count};
-        Body  body = {name, item, hash};
+        Body  body = {name, item};
 
         if ( is_full() ) return fail::NotEnoughSpace;
 
@@ -105,9 +187,10 @@ namespace lgt
 
             if ( iter->dist < head.dist ) {
                 if ( iter->dist == 0 ) {
+                    body.link = m_array[m_count].link;
+
                     ctor(m_heads[i], head);
-                    ctor(m_array[m_count].name, body.name);
-                    ctor(m_array[m_count].item, body.item);
+                    ctor(m_array[m_count], body);
 
                     m_count += 1u;
 
@@ -139,30 +222,6 @@ namespace lgt
     }
 
     template <class Name, class Item, class Layout>
-    template <class Iter, class Func>
-    HashTable<Name, Item, Layout>&
-    HashTable<Name, Item, Layout>::for_each(Iter& iter, Func func)
-    {
-        while ( iter.next() )
-            func(iter.item(), iter.name());
-
-        return *this;
-    }
-
-    template <class Name, class Item, class Layout>
-    template <class Func>
-    HashTable<Name, Item, Layout>&
-    HashTable<Name, Item, Layout>::for_each(Func func)
-    {
-        HashTableForwIter iter = {*this};
-
-        while ( iter.next() )
-            func(iter.item(), iter.name());
-
-        return *this;
-    }
-
-    template <class Name, class Item, class Layout>
     HashTable<Name, Item, Layout>&
     HashTable<Name, Item, Layout>::clear()
     {
@@ -172,22 +231,55 @@ namespace lgt
     }
 
     template <class Name, class Item, class Layout>
-    Item&
-    HashTable<Name, Item, Layout>::find(const Name& name) const
+    Item*
+    HashTable<Name, Item, Layout>::search(const Name& name) const
     {
-        u32 index = index_of(name);
+        auto option = index_of(name);
+        u32  index  = option.item();
 
-        // if ( index < m_heads.length() )
-        return m_array[m_heads[index].link].item;
+        if ( option.is_item() ) {
+            if ( index < m_heads.length() )
+                return &m_array[m_heads[index].link].item;
+        }
 
-        // return true;
+        return 0;
+    }
+
+    template <class Name, class Item, class Layout>
+    Item&
+    HashTable<Name, Item, Layout>::find(const Name& name, Item& fail) const
+    {
+        auto option = index_of(name);
+        u32  index  = option.item();
+
+        if ( option.is_item() ) {
+            if ( index < m_heads.length() )
+                return m_array[m_heads[index].link].item;
+        }
+
+        return fail;
+    }
+
+    template <class Name, class Item, class Layout>
+    const Item&
+    HashTable<Name, Item, Layout>::find(const Name& name, const Item& fail) const
+    {
+        auto option = index_of(name);
+        u32  index  = option.item();
+
+        if ( option.is_item() ) {
+            if ( index < m_heads.length() )
+                return m_array[m_heads[index].link].item;
+        }
+
+        return fail;
     }
 
     template <class Name, class Item, class Layout>
     Item&
     HashTable<Name, Item, Layout>::operator[](const Name& name) const
     {
-        return find(name);
+        return *search(name);
     }
 
     template <class Name, class Item, class Layout>
@@ -215,7 +307,7 @@ namespace lgt
     u32
     HashTable<Name, Item, Layout>::next(u32 code, u32 step) const
     {
-        u32 length = m_array.length();
+        u32 length = m_heads.length();
 
         if ( length != 0 )
             return (code + step) % length;
@@ -280,4 +372,4 @@ namespace lgt
     {
         m_index = g_max_u32;
     }
-} // namespace lgt
+} // namespace lgh

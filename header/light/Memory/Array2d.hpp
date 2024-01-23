@@ -3,7 +3,7 @@
 
 #include <light/Memory/Array.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Item, class Layout = FixedLayout>
     class Array2d
@@ -16,6 +16,11 @@ namespace lgt
         static const u32 s_size = sizeof(Item);
 
     public:
+        /**
+         *
+         */
+        Array2d();
+
         /**
          *
          */
@@ -86,7 +91,7 @@ namespace lgt
          */
         u32 m_height;
     };
-} // namespace lgt
+} // namespace lgh
 
 #include <light/Memory/inline/Array2d.inl>
 

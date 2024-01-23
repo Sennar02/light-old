@@ -1,7 +1,7 @@
 #ifndef LIGHT_BASE_TRAITS_REMOVE_PTR_HPP
 #define LIGHT_BASE_TRAITS_REMOVE_PTR_HPP
 
-namespace lgt
+namespace lgh
 {
     namespace impl
     {
@@ -18,6 +18,6 @@ namespace lgt
 
     template <class Type>
     using RemovePtr = typename impl::RemovePtr<Type>::Main;
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_BASE_TRAITS_REMOVE_PTR_HPP

@@ -1,6 +1,6 @@
 #include <light/Base/String.hpp>
 
-namespace lgt
+namespace lgh
 {
     String::String(const char* memory, u32 length)
         : m_memory {""}
@@ -58,4 +58,4 @@ namespace lgt
 
         return true;
     }
-} // namespace lgt
+} // namespace lgh

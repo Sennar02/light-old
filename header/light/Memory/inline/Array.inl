@@ -1,7 +1,12 @@
 #include <light/Memory/Array.hpp>
 
-namespace lgt
+namespace lgh
 {
+    template <class Item, class Layout>
+    Array<Item, Layout>::Array()
+        : m_layout {}
+    { }
+
     template <class Item, class Layout>
     template <class Origin, class... Args>
     Array<Item, Layout>::Array(Origin& origin, u32 length, Args... args)
@@ -46,4 +51,4 @@ namespace lgt
     {
         return (Item&) m_layout.find(index, s_size);
     }
-} // namespace lgt
+} // namespace lgh

@@ -1,7 +1,12 @@
 #include <light/Memory/Layout/FixedLayout.hpp>
 
-namespace lgt
+namespace lgh
 {
+    FixedLayout::FixedLayout()
+        : m_memory {0}
+        , m_length {0}
+    { }
+
     FixedLayout::FixedLayout(BaseOrigin& origin, u32 items, u32 scale)
         : FixedLayout(origin.acquire(items * scale).item(0), items, scale)
     { }
@@ -41,4 +46,4 @@ namespace lgt
     {
         return m_memory[index * scale];
     }
-} // namespace lgt
+} // namespace lgh

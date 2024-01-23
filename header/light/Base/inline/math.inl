@@ -1,6 +1,6 @@
 #include <light/Base/math.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Type, class Else>
     constexpr Type
@@ -128,4 +128,4 @@ namespace lgt
     {
         return value == other;
     }
-} // namespace lgt
+} // namespace lgh

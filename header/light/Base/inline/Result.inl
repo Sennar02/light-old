@@ -1,6 +1,6 @@
 #include <light/Base/Result.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Item, class Fail>
     Result<Item, Fail>::Result()
@@ -89,4 +89,4 @@ namespace lgt
 
         return m_fail;
     }
-} // namespace lgt
+} // namespace lgh

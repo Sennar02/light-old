@@ -5,7 +5,7 @@
 
 #include <string.h> // strlen
 
-namespace lgt
+namespace lgh
 {
     class String
     {
@@ -61,6 +61,6 @@ namespace lgt
          */
         u32 m_hash;
     };
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_BASE_STRING_HPP

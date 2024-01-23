@@ -4,6 +4,7 @@
 #include <light/Base/define.hpp>
 
 #include <light/Base/Result.hpp>
+#include <light/Base/Option.hpp>
 
 #include <light/Base/math.hpp>
 #include <light/Base/Vec2d.hpp>

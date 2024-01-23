@@ -1,6 +1,6 @@
 #include <light/Memory/Origin/StackOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     // todo: implement StackOrigin.
-} // namespace lgt
+} // namespace lgh

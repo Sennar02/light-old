@@ -4,9 +4,9 @@
 #include <light/Memory/util.hpp>
 #include <light/Memory/Origin/ArenaOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     // todo: implement StackOrigin.
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_MEMORY_ORIGIN_STACK_ORIGIN_HPP

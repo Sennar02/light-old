@@ -1,26 +1,21 @@
-#ifndef LIGHT_BASE_RESULT_HPP
-#define LIGHT_BASE_RESULT_HPP
+#ifndef LIGHT_BASE_OPTION_HPP
+#define LIGHT_BASE_OPTION_HPP
 
 namespace lgh
 {
-    template <class Item, class Fail>
-    class Result
+    template <class Item>
+    class Option
     {
     public:
         /**
          *
          */
-        Result();
+        Option();
 
         /**
          *
          */
-        Result(const Item& item);
-
-        /**
-         *
-         */
-        Result(const Fail& fail);
+        Option(const Item& item);
 
         /**
          *
@@ -43,12 +38,6 @@ namespace lgh
         /**
          *
          */
-        bool
-        is_fail(const Fail& fail) const;
-
-        /**
-         *
-         */
         const Item&
         item(const Item& item) const;
 
@@ -64,12 +53,6 @@ namespace lgh
         Item&
         item();
 
-        /**
-         *
-         */
-        Fail
-        fail() const;
-
     private:
         union
         {
@@ -77,11 +60,6 @@ namespace lgh
              *
              */
             Item m_item;
-
-            /**
-             *
-             */
-            Fail m_fail;
         };
 
         /**
@@ -91,6 +69,6 @@ namespace lgh
     };
 } // namespace lgh
 
-#include <light/Base/inline/Result.inl>
+#include <light/Base/inline/Option.inl>
 
-#endif // LIGHT_BASE_RESULT_HPP
+#endif // LIGHT_BASE_OPTION_HPP

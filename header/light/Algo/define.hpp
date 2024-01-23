@@ -3,7 +3,7 @@
 
 #include <light/Algo/depend.hpp>
 
-namespace lgt
+namespace lgh
 {
     namespace fail
     {
@@ -38,6 +38,6 @@ namespace lgt
 
     template <class Name, class Item, class Layout>
     class HashTable;
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_ALGO_DEFINE_HPP

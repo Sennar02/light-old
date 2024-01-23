@@ -3,7 +3,7 @@
 
 #include <light/Algo/define.hpp>
 
-namespace lgt
+namespace lgh
 {
     struct HashHead
     {
@@ -33,6 +33,12 @@ namespace lgt
          *
          */
         HashTable();
+
+        /**
+         *
+         */
+        template <class... Args>
+        HashTable(const Array<Head, Layout>& heads, const Array<Body, Layout>& array, Args... args);
 
         /**
          *
@@ -72,7 +78,7 @@ namespace lgt
         /**
          *
          */
-        u32
+        Option<u32>
         index_of(const Name& name) const;
 
         /**
@@ -85,15 +91,35 @@ namespace lgt
          *
          */
         template <class Iter, class Func>
-        HashTable&
-        for_each(Iter& iter, Func func);
+        const HashTable&
+        for_each(Iter& iter, Func func) const;
 
         /**
          *
          */
         template <class Func>
-        HashTable&
-        for_each(Func func);
+        const HashTable&
+        for_each(Func func) const;
+
+        /**
+         *
+         */
+        template <class... Args>
+        bool
+        build(const Array<Head, Layout>& heads, const Array<Body, Layout>& array, Args... args);
+
+        /**
+         *
+         */
+        template <class... Args>
+        bool
+        build(Args... args);
+
+        /**
+         *
+         */
+        bool
+        reset();
 
         /**
          *
@@ -116,8 +142,20 @@ namespace lgt
         /**
          *
          */
+        Item*
+        search(const Name& name) const;
+
+        /**
+         *
+         */
         Item&
-        find(const Name& name) const;
+        find(const Name& name, Item& fail) const;
+
+        /**
+         *
+         */
+        const Item&
+        find(const Name& name, const Item& fail) const;
 
         /**
          *
@@ -230,7 +268,7 @@ namespace lgt
     template <class Name, class Item, class Layout>
     HashTableForwIter(const HashTable<Name, Item, Layout>&)
         -> HashTableForwIter<Name, Item, Layout>;
-} // namespace lgt
+} // namespace lgh
 
 #include <light/Algo/inline/HashTable.inl>
 

@@ -3,7 +3,7 @@
 
 #include <light/Base/define.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Type>
     class Vec2d
@@ -102,7 +102,7 @@ namespace lgt
     using Vec2u = Vec2d<u32>;
     using Vec2i = Vec2d<i32>;
     using Vec2f = Vec2d<f32>;
-} // namespace lgt
+} // namespace lgh
 
 #include <light/Base/inline/Vec2d.inl>
 

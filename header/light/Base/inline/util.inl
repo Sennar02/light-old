@@ -1,6 +1,6 @@
 #include <light/Base/util.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Type>
     constexpr RemoveRef<Type>&&
@@ -37,7 +37,7 @@ namespace lgt
     constexpr void
     ctor(Type& value, Args... args)
     {
-        new (&value) Type {forw<Args>(args)...};
+        new (&value) Type(args...);
     }
 
     template <class Type>
@@ -53,4 +53,4 @@ namespace lgt
     {
         return (typename Type::Base&) value;
     }
-} // namespace lgt
+} // namespace lgh

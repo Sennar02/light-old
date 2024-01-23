@@ -2,7 +2,7 @@
 #include <CppUTest/TestHarness.h>
 #include <CppUTest/CommandLineTestRunner.h>
 
-using namespace lgt;
+using namespace lgh;
 
 TEST_GROUP(round) {};
 

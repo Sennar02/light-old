@@ -1,6 +1,6 @@
 #include <light/Memory/Origin/TreeOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     // todo: implement TreeOrigin.
-} // namespace lgt
+} // namespace lgh

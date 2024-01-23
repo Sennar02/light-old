@@ -3,7 +3,7 @@
 
 #include <light/Algo/define.hpp>
 
-namespace lgt
+namespace lgh
 {
     namespace algo
     {
@@ -68,15 +68,35 @@ namespace lgt
          *
          */
         template <class Iter, class Func>
-        ArrayDeque&
-        for_each(Iter& iter, Func func);
+        const ArrayDeque&
+        for_each(Iter& iter, Func func) const;
 
         /**
          *
          */
         template <class Func>
-        ArrayDeque&
-        for_each(Func func);
+        const ArrayDeque&
+        for_each(Func func) const;
+
+        /**
+         *
+         */
+        template <class... Args>
+        bool
+        build(const Array<Item, Layout>& array, Args... args);
+
+        /**
+         *
+         */
+        template <class... Args>
+        bool
+        build(Args... args);
+
+        /**
+         *
+         */
+        bool
+        reset();
 
         /**
          *
@@ -99,8 +119,20 @@ namespace lgt
         /**
          *
          */
+        Item*
+        search(u32 index) const;
+
+        /**
+         *
+         */
         Item&
-        find(u32 index) const;
+        find(u32 index, Item& fail) const;
+
+        /**
+         *
+         */
+        const Item&
+        find(u32 index, const Item& fail) const;
 
         /**
          *
@@ -201,7 +233,7 @@ namespace lgt
     template <class Item, class Layout>
     ArrayDequeForwIter(const ArrayList<Item, Layout>&)
         -> ArrayDequeForwIter<Item, Layout>;
-} // namespace lgt
+} // namespace lgh
 
 #include <light/Algo/inline/ArrayDeque.inl>
 

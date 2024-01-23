@@ -1,6 +1,6 @@
 #include <light/Memory/Origin/EmptyOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     EmptyOrigin::EmptyOrigin()
         : BaseOrigin()
@@ -39,4 +39,4 @@ namespace lgt
 
         return fail::NotMemoryParent;
     }
-} // namespace lgt
+} // namespace lgh

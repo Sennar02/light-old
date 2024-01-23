@@ -1,7 +1,7 @@
 #ifndef LIGHT_BASE_TRAITS_REMOVE_REF_HPP
 #define LIGHT_BASE_TRAITS_REMOVE_REF_HPP
 
-namespace lgt
+namespace lgh
 {
     namespace impl
     {
@@ -23,6 +23,6 @@ namespace lgt
 
     template <class Type>
     using RemoveRef = typename impl::RemoveRef<Type>::Main;
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_BASE_TRAITS_REMOVE_REF_HPP

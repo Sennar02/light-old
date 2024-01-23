@@ -6,7 +6,7 @@
 
 #include <string.h> // memset
 
-namespace lgt
+namespace lgh
 {
     class ArenaOrigin
         : public BaseOrigin
@@ -52,6 +52,6 @@ namespace lgt
          */
         char* m_border;
     };
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_MEMORY_ORIGIN_ARENA_ORIGIN_HPP

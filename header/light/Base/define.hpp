@@ -3,7 +3,7 @@
 
 #include <light/Base/depend.hpp>
 
-namespace lgt
+namespace lgh
 {
     using u8  = uint8_t;
     using u16 = uint16_t;
@@ -65,21 +65,21 @@ namespace lgt
     static const u32 g_len_f32 = sizeof(f32);
     static const u32 g_len_f64 = sizeof(f64);
 
-    template <class Succ, class Fail>
+    template <class Item, class Fail>
     class Result;
 
-    template <class Succ>
-    using Option = Result<Succ, bool>;
+    template <class Item>
+    class Option;
 
     template <class Item>
     class Vec2d;
 
     class String;
-} // namespace lgt
+} // namespace lgh
 
 // clang-format off
 #define LGT_STRING(str) \
-    lgt::String { str, sizeof(str) - 1u }
+    lgh::String { str, sizeof(str) - 1u }
 
 #define LGT_AS_STRING(val) \
     LGT_STRING(#val)

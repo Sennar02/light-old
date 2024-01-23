@@ -1,6 +1,6 @@
 #include <light/Engine/EntityFactory.hpp>
 
-namespace lgt
+namespace lgh
 {
     template <class Item>
     template <class... Args>
@@ -60,7 +60,6 @@ namespace lgt
 
             m_head = encode(info);
             m_count += 1u;
-
         } else
             return fail::UnknownElement;
 
@@ -85,4 +84,4 @@ namespace lgt
 
         return option;
     }
-} // namespace lgt
+} // namespace lgh

@@ -3,7 +3,7 @@
 
 #include <light/Engine/define.hpp>
 
-namespace lgt
+namespace lgh
 {
     using EntityType = u32;
 
@@ -41,7 +41,7 @@ namespace lgt
     template <class Type>
     Type
     encode(EntityInfo<Type> info);
-} // namespace lgt
+} // namespace lgh
 
 #include <light/Engine/inline/EntityInfo.inl>
 

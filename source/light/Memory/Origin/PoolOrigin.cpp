@@ -1,6 +1,6 @@
 #include <light/Memory/Origin/PoolOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     union Head
     {
@@ -173,4 +173,4 @@ namespace lgt
             m_count += 1u;
         }
     }
-} // namespace lgt
+} // namespace lgh

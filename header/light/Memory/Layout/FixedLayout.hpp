@@ -3,11 +3,16 @@
 
 #include <light/Memory/Origin/BaseOrigin.hpp>
 
-namespace lgt
+namespace lgh
 {
     class FixedLayout
     {
     public:
+        /**
+         *
+         */
+        FixedLayout();
+
         /**
          *
          */
@@ -53,6 +58,6 @@ namespace lgt
          */
         u32 m_length;
     };
-} // namespace lgt
+} // namespace lgh
 
 #endif // LIGHT_MEMORY_LAYOUT_FIXED_LAYOUT_HPP
