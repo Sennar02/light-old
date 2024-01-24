@@ -40,6 +40,13 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
+    Array<Item, Layout>::find(u32 index)
+    {
+        return (Item&) m_layout.find(index, s_size);
+    }
+
+    template <class Item, class Layout>
+    const Item&
     Array<Item, Layout>::find(u32 index) const
     {
         return (Item&) m_layout.find(index, s_size);
@@ -47,6 +54,13 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
+    Array<Item, Layout>::operator[](u32 index)
+    {
+        return (Item&) m_layout.find(index, s_size);
+    }
+
+    template <class Item, class Layout>
+    const Item&
     Array<Item, Layout>::operator[](u32 index) const
     {
         return (Item&) m_layout.find(index, s_size);

@@ -14,7 +14,7 @@ light_define = []
 
 subdir('source/light/Base')
 subdir('source/light/Memory')
-subdir('source/light/Engine')
+subdir('source/light/Algo')
 
 executable('light-main',
     sources: [

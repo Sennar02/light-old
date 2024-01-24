@@ -55,13 +55,50 @@ namespace lgh
 
     template <class Item, class Layout>
     template <class Iter, class Func>
-    const ArrayDeque<Item, Layout>&
-    ArrayDeque<Item, Layout>::for_each(Iter& iter, Func func) const
+    ArrayDeque<Item, Layout>&
+    ArrayDeque<Item, Layout>::for_each(Iter iter, Func func)
     {
-        while ( iter.next() )
-            func(iter.item(), iter.index());
+        u32   index = 0;
+        Item* item  = 0;
+
+        if ( is_empty() ) return *this;
+
+        while ( iter.has_next(m_count) ) {
+            index = next(m_delta, iter.next(m_count));
+            item  = &m_array[index];
+
+            func(*item, index);
+        }
 
         return *this;
+    }
+
+    template <class Item, class Layout>
+    template <class Iter, class Func>
+    const ArrayDeque<Item, Layout>&
+    ArrayDeque<Item, Layout>::for_each(Iter iter, Func func) const
+    {
+        u32         index = 0;
+        const Item* item  = 0;
+
+        if ( is_empty() ) return *this;
+
+        while ( iter.has_next(m_count) ) {
+            index = next(m_delta, iter.next(m_count));
+            item  = &m_array[index];
+
+            func(*item, index);
+        }
+
+        return *this;
+    }
+
+    template <class Item, class Layout>
+    template <class Func>
+    ArrayDeque<Item, Layout>&
+    ArrayDeque<Item, Layout>::for_each(Func func)
+    {
+        return for_each(ForwIterator {}, func);
     }
 
     template <class Item, class Layout>
@@ -69,12 +106,7 @@ namespace lgh
     const ArrayDeque<Item, Layout>&
     ArrayDeque<Item, Layout>::for_each(Func func) const
     {
-        ArrayDequeForwIter iter = {*this};
-
-        while ( iter.next() )
-            func(iter.item(), iter.index());
-
-        return *this;
+        return for_each(ForwIterator {}, func);
     }
 
     template <class Item, class Layout>
@@ -139,7 +171,7 @@ namespace lgh
 
         if ( is_empty() ) return fail::UnknownElement;
 
-        if ( side == algo::Head )
+        if ( side == algo::Tail )
             index = m_count - 1u;
         else
             m_delta = next(index);
@@ -161,6 +193,16 @@ namespace lgh
 
     template <class Item, class Layout>
     Item*
+    ArrayDeque<Item, Layout>::search(u32 index)
+    {
+        if ( index < m_count )
+            return &m_array[next(m_delta, index)];
+
+        return 0;
+    }
+
+    template <class Item, class Layout>
+    const Item*
     ArrayDeque<Item, Layout>::search(u32 index) const
     {
         if ( index < m_count )
@@ -171,7 +213,7 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
-    ArrayDeque<Item, Layout>::find(u32 index, Item& fail) const
+    ArrayDeque<Item, Layout>::find(u32 index, Item& fail)
     {
         if ( index < m_count )
             return m_array[next(m_delta, index)];
@@ -191,6 +233,13 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
+    ArrayDeque<Item, Layout>::operator[](u32 index)
+    {
+        return *search(index);
+    }
+
+    template <class Item, class Layout>
+    const Item&
     ArrayDeque<Item, Layout>::operator[](u32 index) const
     {
         return *search(index);
@@ -213,63 +262,5 @@ namespace lgh
             return (code + step) % length;
 
         return length;
-    }
-
-    template <class Item, class Layout>
-    ArrayDequeForwIter<Item, Layout>::ArrayDequeForwIter(const Deque& deque)
-        : m_deque {deque}
-        , m_index {g_max_u32}
-    { }
-
-    template <class Item, class Layout>
-    u32
-    ArrayDequeForwIter<Item, Layout>::index() const
-    {
-        return m_index;
-    }
-
-    template <class Item, class Layout>
-    Item&
-    ArrayDequeForwIter<Item, Layout>::item()
-    {
-        return m_deque.array()[m_index];
-    }
-
-    template <class Item, class Layout>
-    const Item&
-    ArrayDequeForwIter<Item, Layout>::item() const
-    {
-        return m_deque.array()[m_index];
-    }
-
-    template <class Item, class Layout>
-    bool
-    ArrayDequeForwIter<Item, Layout>::has_next() const
-    {
-        u32 next = m_index + 1u;
-
-        if ( next < m_deque.count() )
-            return true;
-
-        return false;
-    }
-
-    template <class Item, class Layout>
-    bool
-    ArrayDequeForwIter<Item, Layout>::next()
-    {
-        u32 next = m_index + 1u;
-
-        if ( next < m_deque.count() )
-            m_index = next;
-
-        return m_index == next;
-    }
-
-    template <class Item, class Layout>
-    void
-    ArrayDequeForwIter<Item, Layout>::reset()
-    {
-        m_index = g_max_u32;
     }
 } // namespace lgh

@@ -7,7 +7,7 @@
 #include <light/Base/Option.hpp>
 
 #include <light/Base/math.hpp>
-#include <light/Base/Vec2d.hpp>
+#include <light/Base/Vector.hpp>
 #include <light/Base/String.hpp>
 
 #include <light/Base/util.hpp>

@@ -6,7 +6,7 @@
 namespace lgh
 {
     template <class Item, class Layout = FixedLayout>
-    class Array2d
+    class Array2D
         : public Array<Item, Layout>
     {
     public:
@@ -19,24 +19,24 @@ namespace lgh
         /**
          *
          */
-        Array2d();
+        Array2D();
 
         /**
          *
          */
         template <class Origin, class... Args>
-        Array2d(Origin& origin, u32 length, u32 width, Args... args);
+        Array2D(Origin& origin, u32 length, u32 width, Args... args);
 
         /**
          *
          */
         template <class... Args>
-        Array2d(void* memory, u32 length, u32 width, Args... args);
+        Array2D(void* memory, u32 length, u32 width, Args... args);
 
         /**
          *
          */
-        Array2d(const Layout& layout, u32 width);
+        Array2D(const Layout& layout, u32 width);
 
         /**
          *
@@ -60,25 +60,49 @@ namespace lgh
          *
          */
         Item&
+        find(u32 index);
+
+        /**
+         *
+         */
+        const Item&
         find(u32 index) const;
 
         /**
          *
          */
         Item&
-        find(Vec2u index) const;
+        find(Vector2u index);
+
+        /**
+         *
+         */
+        const Item&
+        find(Vector2u index) const;
 
         /**
          *
          */
         Item&
+        operator[](u32 index);
+
+        /**
+         *
+         */
+        const Item&
         operator[](u32 index) const;
 
         /**
          *
          */
         Item&
-        operator[](Vec2u index) const;
+        operator[](Vector2u index);
+
+        /**
+         *
+         */
+        const Item&
+        operator[](Vector2u index) const;
 
     protected:
         /**
@@ -93,6 +117,6 @@ namespace lgh
     };
 } // namespace lgh
 
-#include <light/Memory/inline/Array2d.inl>
+#include <light/Memory/inline/Array2D.inl>
 
 #endif // LIGHT_MEMORY_ARRAY_2D_HPP

@@ -71,8 +71,15 @@ namespace lgh
     template <class Item>
     class Option;
 
-    template <class Item>
-    class Vec2d;
+    template <class Item, u32 Size>
+    class Vector;
+
+    template <class Type>
+    using Vector2D = Vector<Type, 2>;
+
+    using Vector2u = Vector2D<u32>;
+    using Vector2i = Vector2D<i32>;
+    using Vector2f = Vector2D<f32>;
 
     class String;
 } // namespace lgh
@@ -80,12 +87,6 @@ namespace lgh
 // clang-format off
 #define LGT_STRING(str) \
     lgh::String { str, sizeof(str) - 1u }
-
-#define LGT_AS_STRING(val) \
-    LGT_STRING(#val)
-
-#define LGT_UNDEF(type, item) \
-    union { type item; }
 // clang-format on
 
 #endif // LIGHT_BASE_DEFINE_HPP

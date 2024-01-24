@@ -124,7 +124,7 @@ namespace lgh
 
     template <class Type>
     constexpr bool
-    Compare<Type>::equals(const Type& value, const Type& other)
+    Equals<Type>::equals(const Type& value, const Type& other)
     {
         return value == other;
     }

@@ -1,9 +1,9 @@
-#include <light/Memory/Array2d.hpp>
+#include <light/Memory/Array2D.hpp>
 
 namespace lgh
 {
     template <class Item, class Layout>
-    Array2d<Item, Layout>::Array2d()
+    Array2D<Item, Layout>::Array2D()
         : Array<Item, Layout>()
         , m_width {0}
         , m_height {0}
@@ -11,18 +11,18 @@ namespace lgh
 
     template <class Item, class Layout>
     template <class Origin, class... Args>
-    Array2d<Item, Layout>::Array2d(Origin& origin, u32 length, u32 width, Args... args)
-        : Array2d(Layout {origin, length, width, args...}, width)
+    Array2D<Item, Layout>::Array2D(Origin& origin, u32 length, u32 width, Args... args)
+        : Array2D(Layout {origin, length, width, args...}, width)
     { }
 
     template <class Item, class Layout>
     template <class... Args>
-    Array2d<Item, Layout>::Array2d(void* memory, u32 length, u32 width, Args... args)
-        : Array2d(Layout {memory, length, width, args...}, width)
+    Array2D<Item, Layout>::Array2D(void* memory, u32 length, u32 width, Args... args)
+        : Array2D(Layout {memory, length, width, args...}, width)
     { }
 
     template <class Item, class Layout>
-    Array2d<Item, Layout>::Array2d(const Layout& layout, u32 width)
+    Array2D<Item, Layout>::Array2D(const Layout& layout, u32 width)
         : Array<Item, Layout>(layout)
         , m_width {0}
         , m_height {0}
@@ -38,21 +38,21 @@ namespace lgh
 
     template <class Item, class Layout>
     u32
-    Array2d<Item, Layout>::width() const
+    Array2D<Item, Layout>::width() const
     {
         return m_width;
     }
 
     template <class Item, class Layout>
     u32
-    Array2d<Item, Layout>::height() const
+    Array2D<Item, Layout>::height() const
     {
         return m_width;
     }
 
     template <class Item, class Layout>
     bool
-    Array2d<Item, Layout>::resize(u32 length, u32 width)
+    Array2D<Item, Layout>::resize(u32 length, u32 width)
     {
         auto& self = *(Array<Item, Layout>*) this;
 
@@ -73,7 +73,16 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
-    Array2d<Item, Layout>::find(u32 index) const
+    Array2D<Item, Layout>::find(u32 index)
+    {
+        auto& self = *(Array<Item, Layout>*) this;
+
+        return self.find(index);
+    }
+
+    template <class Item, class Layout>
+    const Item&
+    Array2D<Item, Layout>::find(u32 index) const
     {
         auto& self = *(Array<Item, Layout>*) this;
 
@@ -82,7 +91,17 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
-    Array2d<Item, Layout>::find(Vec2u index) const
+    Array2D<Item, Layout>::find(Vector2u index)
+    {
+        auto& self  = *(Array<Item, Layout>*) this;
+        u32   value = index[1] * m_width + index[0];
+
+        return self.find(value);
+    }
+
+    template <class Item, class Layout>
+    const Item&
+    Array2D<Item, Layout>::find(Vector2u index) const
     {
         auto& self  = *(Array<Item, Layout>*) this;
         u32   value = index[1] * m_width + index[0];
@@ -92,7 +111,16 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
-    Array2d<Item, Layout>::operator[](u32 index) const
+    Array2D<Item, Layout>::operator[](u32 index)
+    {
+        auto& self = *(Array<Item, Layout>*) this;
+
+        return self.find(index);
+    }
+
+    template <class Item, class Layout>
+    const Item&
+    Array2D<Item, Layout>::operator[](u32 index) const
     {
         auto& self = *(Array<Item, Layout>*) this;
 
@@ -101,7 +129,17 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
-    Array2d<Item, Layout>::operator[](Vec2u index) const
+    Array2D<Item, Layout>::operator[](Vector2u index)
+    {
+        auto& self  = *(Array<Item, Layout>*) this;
+        u32   value = index[1] * m_width + index[0];
+
+        return self.find(value);
+    }
+
+    template <class Item, class Layout>
+    const Item&
+    Array2D<Item, Layout>::operator[](Vector2u index) const
     {
         auto& self  = *(Array<Item, Layout>*) this;
         u32   value = index[1] * m_width + index[0];

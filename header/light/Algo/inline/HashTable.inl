@@ -74,7 +74,7 @@ namespace lgh
             pair = &m_array[iter->link];
 
             if ( iter->dist != 0 && iter->hash == hash ) {
-                if ( Compare<Name>::equals(pair->name, name) )
+                if ( Equals<Name>::equals(pair->name, name) )
                     return i;
             }
         }
@@ -99,13 +99,54 @@ namespace lgh
 
     template <class Name, class Item, class Layout>
     template <class Iter, class Func>
-    const HashTable<Name, Item, Layout>&
-    HashTable<Name, Item, Layout>::for_each(Iter& iter, Func func) const
+    HashTable<Name, Item, Layout>&
+    HashTable<Name, Item, Layout>::for_each(Iter iter, Func func)
     {
-        while ( iter.next() )
-            func(iter.item(), iter.name());
+        u32         index = 0;
+        const Name* name  = 0;
+        Item*       item  = 0;
+
+        if ( is_empty() ) return *this;
+
+        while ( iter.has_next(m_count) ) {
+            index = iter.next(m_count);
+            name  = &m_array[index].name;
+            item  = &m_array[index].item;
+
+            func(*item, *name);
+        }
 
         return *this;
+    }
+
+    template <class Name, class Item, class Layout>
+    template <class Iter, class Func>
+    const HashTable<Name, Item, Layout>&
+    HashTable<Name, Item, Layout>::for_each(Iter iter, Func func) const
+    {
+        u32         index = 0;
+        const Name* name  = 0;
+        const Item* item  = 0;
+
+        if ( is_empty() ) return *this;
+
+        while ( iter.has_next(m_count) ) {
+            index = iter.next(m_count);
+            name  = &m_array[index].name;
+            item  = &m_array[index].item;
+
+            func(*item, *name);
+        }
+
+        return *this;
+    }
+
+    template <class Name, class Item, class Layout>
+    template <class Func>
+    HashTable<Name, Item, Layout>&
+    HashTable<Name, Item, Layout>::for_each(Func func)
+    {
+        return for_each(ForwIterator {}, func);
     }
 
     template <class Name, class Item, class Layout>
@@ -113,12 +154,7 @@ namespace lgh
     const HashTable<Name, Item, Layout>&
     HashTable<Name, Item, Layout>::for_each(Func func) const
     {
-        HashTableForwIter iter = {*this};
-
-        while ( iter.next() )
-            func(iter.item(), iter.name());
-
-        return *this;
+        return for_each(ForwIterator {}, func);
     }
 
     template <class Name, class Item, class Layout>
@@ -181,7 +217,7 @@ namespace lgh
             m_array[head.link].link = i;
 
             if ( iter->dist != 0 && iter->hash == hash ) {
-                if ( Compare<Name>::equals(pair->name, name) )
+                if ( Equals<Name>::equals(pair->name, name) )
                     return fail::NameRepetition;
             }
 
@@ -232,6 +268,21 @@ namespace lgh
 
     template <class Name, class Item, class Layout>
     Item*
+    HashTable<Name, Item, Layout>::search(const Name& name)
+    {
+        auto option = index_of(name);
+        u32  index  = option.item();
+
+        if ( option.is_item() ) {
+            if ( index < m_heads.length() )
+                return &m_array[m_heads[index].link].item;
+        }
+
+        return 0;
+    }
+
+    template <class Name, class Item, class Layout>
+    const Item*
     HashTable<Name, Item, Layout>::search(const Name& name) const
     {
         auto option = index_of(name);
@@ -247,7 +298,7 @@ namespace lgh
 
     template <class Name, class Item, class Layout>
     Item&
-    HashTable<Name, Item, Layout>::find(const Name& name, Item& fail) const
+    HashTable<Name, Item, Layout>::find(const Name& name, Item& fail)
     {
         auto option = index_of(name);
         u32  index  = option.item();
@@ -277,6 +328,13 @@ namespace lgh
 
     template <class Name, class Item, class Layout>
     Item&
+    HashTable<Name, Item, Layout>::operator[](const Name& name)
+    {
+        return *search(name);
+    }
+
+    template <class Name, class Item, class Layout>
+    const Item&
     HashTable<Name, Item, Layout>::operator[](const Name& name) const
     {
         return *search(name);
@@ -315,61 +373,4 @@ namespace lgh
         return length;
     }
 
-    template <class Name, class Item, class Layout>
-    HashTableForwIter<Name, Item, Layout>::HashTableForwIter(const Table& table)
-        : m_table {table}
-        , m_index {g_max_u32}
-    { }
-
-    template <class Name, class Item, class Layout>
-    const Name&
-    HashTableForwIter<Name, Item, Layout>::name() const
-    {
-        return m_table.array()[m_index].name;
-    }
-
-    template <class Name, class Item, class Layout>
-    Item&
-    HashTableForwIter<Name, Item, Layout>::item()
-    {
-        return m_table.array()[m_index].item;
-    }
-
-    template <class Name, class Item, class Layout>
-    const Item&
-    HashTableForwIter<Name, Item, Layout>::item() const
-    {
-        return m_table.array()[m_index].item;
-    }
-
-    template <class Name, class Item, class Layout>
-    bool
-    HashTableForwIter<Name, Item, Layout>::has_next() const
-    {
-        u32 next = m_index + 1u;
-
-        if ( next < m_table.count() )
-            return true;
-
-        return false;
-    }
-
-    template <class Name, class Item, class Layout>
-    bool
-    HashTableForwIter<Name, Item, Layout>::next()
-    {
-        u32 next = m_index + 1u;
-
-        if ( next < m_table.count() )
-            m_index = next;
-
-        return m_index == next;
-    }
-
-    template <class Name, class Item, class Layout>
-    void
-    HashTableForwIter<Name, Item, Layout>::reset()
-    {
-        m_index = g_max_u32;
-    }
 } // namespace lgh

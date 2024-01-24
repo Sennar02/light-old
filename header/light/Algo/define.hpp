@@ -14,8 +14,8 @@ namespace lgh
         };
 
         static const char* const g_insert[] = {
-            LGT_AS_STRING(Insert::NotEnoughSpace).memory(),
-            LGT_AS_STRING(Insert::NameRepetition).memory(),
+            "Insert::NotEnoughSpace",
+            "Insert::NameRepetition",
         };
 
         enum Remove
@@ -25,8 +25,8 @@ namespace lgh
         };
 
         static const char* const g_remove[] = {
-            LGT_AS_STRING(Remove::UnknownElement).memory(),
-            LGT_AS_STRING(Remove::AlreadyRemoved).memory(),
+            "Remove::UnknownElement",
+            "Remove::AlreadyRemoved",
         };
     } // namespace fail
 
@@ -38,6 +38,9 @@ namespace lgh
 
     template <class Name, class Item, class Layout>
     class HashTable;
+
+    class ForwIterator;
+    class BackIterator;
 } // namespace lgh
 
 #endif // LIGHT_ALGO_DEFINE_HPP

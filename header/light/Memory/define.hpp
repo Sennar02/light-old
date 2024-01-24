@@ -9,7 +9,6 @@ namespace lgh
      *
      */
     class BaseOrigin;
-    class KernOrigin;
     class PoolOrigin;
     class TreeOrigin;
     class ArenaOrigin;
@@ -26,9 +25,9 @@ namespace lgh
         };
 
         static const char* const g_acquire[] = {
-            LGT_AS_STRING(Acquire::NotEnoughMemory).memory(),
-            LGT_AS_STRING(Acquire::AlignmentFiasco).memory(),
-            LGT_AS_STRING(Acquire::NoByteRequested).memory(),
+            "Acquire::NotEnoughMemory",
+            "Acquire::AlignmentFiasco",
+            "Acquire::NoByteRequested",
         };
 
         enum Release
@@ -38,8 +37,8 @@ namespace lgh
         };
 
         static const char* const g_release[] = {
-            LGT_AS_STRING(Release::AlreadyReleased).memory(),
-            LGT_AS_STRING(Release::NotMemoryParent).memory(),
+            "Release::AlreadyReleased",
+            "Release::NotMemoryParent",
         };
     } // namespace fail
 
@@ -48,9 +47,9 @@ namespace lgh
      * for their own memory and must expose
      * at least the following interface:
      *
-     * - u32 length(u32 scale) const;
-     * - bool resize(u32 items, u32 scale);
-     * - char& find(u32 index, u32 scale) const;
+     * bool   | resize(u32 items, u32 scale);
+     * u32    | length(u32 scale) const;
+     * char & |   find(u32 index, u32 scale) const;
      */
     class FixedLayout;
 
@@ -64,7 +63,7 @@ namespace lgh
      * Two-dimensional array of elements.
      */
     template <class Item, class Layout>
-    class Array2d;
+    class Array2D;
 
     static const u32 g_KiB = 1024u;
     static const u32 g_MiB = g_KiB * g_KiB;

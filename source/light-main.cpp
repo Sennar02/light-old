@@ -58,13 +58,21 @@ main(int, const char*[])
     srand(time(0));
 
     for ( u32 i = 0; i < g_count * 1.5f; i++ ) {
-        u32 name = rand() % (g_count * 3u);
+        u32 name = i; // rand() % (g_count * 3u);
         u32 item = rand() % (g_count * 3u);
 
         table.insert(name, item);
     }
 
-    print_table(table);
+    auto func = [](const auto& table) {
+        table.for_each(BackIterator {}, [](const u32& item, const u32& name) {
+            printf("%3u := %3u\n", name, item);
+        });
+    };
+
+    // print_table(table);
+
+    func(table);
 
     return 0;
 }

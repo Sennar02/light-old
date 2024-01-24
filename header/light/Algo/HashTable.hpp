@@ -2,6 +2,7 @@
 #define LIGHT_ALGO_HASH_TABLE_HPP
 
 #include <light/Algo/define.hpp>
+#include <light/Algo/ForwIterator.hpp>
 
 namespace lgh
 {
@@ -15,10 +16,9 @@ namespace lgh
     template <class Name, class Item>
     struct HashBody
     {
-        LGT_UNDEF(Name, name);
-        LGT_UNDEF(Item, item);
-
-        u32 link = 0;
+        Name name;
+        Item item;
+        u32  link = 0;
     };
 
     template <class Name, class Item, class Layout = FixedLayout>
@@ -91,8 +91,22 @@ namespace lgh
          *
          */
         template <class Iter, class Func>
+        HashTable&
+        for_each(Iter iter, Func func);
+
+        /**
+         *
+         */
+        template <class Iter, class Func>
         const HashTable&
-        for_each(Iter& iter, Func func) const;
+        for_each(Iter iter, Func func) const;
+
+        /**
+         *
+         */
+        template <class Func>
+        HashTable&
+        for_each(Func func);
 
         /**
          *
@@ -143,13 +157,19 @@ namespace lgh
          *
          */
         Item*
+        search(const Name& name);
+
+        /**
+         *
+         */
+        const Item*
         search(const Name& name) const;
 
         /**
          *
          */
         Item&
-        find(const Name& name, Item& fail) const;
+        find(const Name& name, Item& fail);
 
         /**
          *
@@ -161,6 +181,12 @@ namespace lgh
          *
          */
         Item&
+        operator[](const Name& name);
+
+        /**
+         *
+         */
+        const Item&
         operator[](const Name& name) const;
 
         /**
@@ -204,70 +230,6 @@ namespace lgh
          */
         u32 m_count;
     };
-
-    template <class Name, class Item, class Layout>
-    class HashTableForwIter
-    {
-    private:
-        using Table = HashTable<Name, Item, Layout>;
-
-    public:
-        /**
-         *
-         */
-        HashTableForwIter(const Table& table);
-
-        /**
-         *
-         */
-        const Name&
-        name() const;
-
-        /**
-         *
-         */
-        Item&
-        item();
-
-        /**
-         *
-         */
-        const Item&
-        item() const;
-
-        /**
-         *
-         */
-        bool
-        has_next() const;
-
-        /**
-         *
-         */
-        bool
-        next();
-
-        /**
-         *
-         */
-        void
-        reset();
-
-    private:
-        /**
-         *
-         */
-        const Table& m_table;
-
-        /**
-         *
-         */
-        u32 m_index;
-    };
-
-    template <class Name, class Item, class Layout>
-    HashTableForwIter(const HashTable<Name, Item, Layout>&)
-        -> HashTableForwIter<Name, Item, Layout>;
 } // namespace lgh
 
 #include <light/Algo/inline/HashTable.inl>

@@ -29,7 +29,7 @@ namespace lgh
     };
 
     template <class Type>
-    struct Compare
+    struct Equals
     {
         constexpr static bool
         equals(const Type& value, const Type& other);

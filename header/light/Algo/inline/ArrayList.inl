@@ -52,13 +52,50 @@ namespace lgh
 
     template <class Item, class Layout>
     template <class Iter, class Func>
-    const ArrayList<Item, Layout>&
-    ArrayList<Item, Layout>::for_each(Iter& iter, Func func) const
+    ArrayList<Item, Layout>&
+    ArrayList<Item, Layout>::for_each(Iter iter, Func func)
     {
-        while ( iter.next() )
-            func(iter.item(), iter.index());
+        u32   index = 0;
+        Item* item  = 0;
+
+        if ( is_empty() ) return *this;
+
+        while ( iter.has_next(m_count) ) {
+            index = iter.next(m_count);
+            item  = &m_array[index];
+
+            func(*item, index);
+        }
 
         return *this;
+    }
+
+    template <class Item, class Layout>
+    template <class Iter, class Func>
+    const ArrayList<Item, Layout>&
+    ArrayList<Item, Layout>::for_each(Iter iter, Func func) const
+    {
+        u32         index = 0;
+        const Item* item  = 0;
+
+        if ( is_empty() ) return *this;
+
+        while ( iter.has_next(m_count) ) {
+            index = iter.next(m_count);
+            item  = &m_array[index];
+
+            func(*item, index);
+        }
+
+        return *this;
+    }
+
+    template <class Item, class Layout>
+    template <class Func>
+    ArrayList<Item, Layout>&
+    ArrayList<Item, Layout>::for_each(Func func)
+    {
+        return for_each(ForwIterator {}, func);
     }
 
     template <class Item, class Layout>
@@ -66,12 +103,7 @@ namespace lgh
     const ArrayList<Item, Layout>&
     ArrayList<Item, Layout>::for_each(Func func) const
     {
-        ArrayListForwIter iter = {*this};
-
-        while ( iter.next() )
-            func(iter.item(), iter.index());
-
-        return *this;
+        return for_each(ForwIterator {}, func);
     }
 
     template <class Item, class Layout>
@@ -161,6 +193,16 @@ namespace lgh
 
     template <class Item, class Layout>
     Item*
+    ArrayList<Item, Layout>::search(u32 index)
+    {
+        if ( index < m_array.length() )
+            return &m_array[index];
+
+        return 0;
+    }
+
+    template <class Item, class Layout>
+    const Item*
     ArrayList<Item, Layout>::search(u32 index) const
     {
         if ( index < m_array.length() )
@@ -171,7 +213,7 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
-    ArrayList<Item, Layout>::find(u32 index, Item& fail) const
+    ArrayList<Item, Layout>::find(u32 index, Item& fail)
     {
         if ( index < m_array.length() )
             return m_array[index];
@@ -191,6 +233,13 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
+    ArrayList<Item, Layout>::operator[](u32 index)
+    {
+        return *search(index);
+    }
+
+    template <class Item, class Layout>
+    const Item&
     ArrayList<Item, Layout>::operator[](u32 index) const
     {
         return *search(index);
@@ -201,63 +250,5 @@ namespace lgh
     ArrayList<Item, Layout>::array() const
     {
         return m_array;
-    }
-
-    template <class Item, class Layout>
-    ArrayListForwIter<Item, Layout>::ArrayListForwIter(const List& list)
-        : m_list {list}
-        , m_index {g_max_u32}
-    { }
-
-    template <class Item, class Layout>
-    u32
-    ArrayListForwIter<Item, Layout>::index() const
-    {
-        return m_index;
-    }
-
-    template <class Item, class Layout>
-    Item&
-    ArrayListForwIter<Item, Layout>::item()
-    {
-        return m_list.array()[m_index];
-    }
-
-    template <class Item, class Layout>
-    const Item&
-    ArrayListForwIter<Item, Layout>::item() const
-    {
-        return m_list.array()[m_index];
-    }
-
-    template <class Item, class Layout>
-    bool
-    ArrayListForwIter<Item, Layout>::has_next() const
-    {
-        u32 next = m_index + 1u;
-
-        if ( next < m_list.count() )
-            return true;
-
-        return false;
-    }
-
-    template <class Item, class Layout>
-    bool
-    ArrayListForwIter<Item, Layout>::next()
-    {
-        u32 next = m_index + 1u;
-
-        if ( next < m_list.count() )
-            m_index = next;
-
-        return m_index == next;
-    }
-
-    template <class Item, class Layout>
-    void
-    ArrayListForwIter<Item, Layout>::reset()
-    {
-        m_index = g_max_u32;
     }
 } // namespace lgh

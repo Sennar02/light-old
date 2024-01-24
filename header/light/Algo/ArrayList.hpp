@@ -2,6 +2,7 @@
 #define LIGHT_ALGO_ARRAY_LIST_HPP
 
 #include <light/Algo/define.hpp>
+#include <light/Algo/ForwIterator.hpp>
 
 namespace lgh
 {
@@ -59,8 +60,22 @@ namespace lgh
          *
          */
         template <class Iter, class Func>
+        ArrayList&
+        for_each(Iter iter, Func func);
+
+        /**
+         *
+         */
+        template <class Iter, class Func>
         const ArrayList&
-        for_each(Iter& iter, Func func) const;
+        for_each(Iter iter, Func func) const;
+
+        /**
+         *
+         */
+        template <class Func>
+        ArrayList&
+        for_each(Func func);
 
         /**
          *
@@ -111,13 +126,19 @@ namespace lgh
          *
          */
         Item*
+        search(u32 index);
+
+        /**
+         *
+         */
+        const Item*
         search(u32 index) const;
 
         /**
          *
          */
         Item&
-        find(u32 index, Item& fail) const;
+        find(u32 index, Item& fail);
 
         /**
          *
@@ -129,6 +150,12 @@ namespace lgh
          *
          */
         Item&
+        operator[](u32 index);
+
+        /**
+         *
+         */
+        const Item&
         operator[](u32 index) const;
 
         /**
@@ -148,70 +175,6 @@ namespace lgh
          */
         u32 m_count;
     };
-
-    template <class Item, class Layout>
-    class ArrayListForwIter
-    {
-    private:
-        using List = ArrayList<Item, Layout>;
-
-    public:
-        /**
-         *
-         */
-        ArrayListForwIter(const List& list);
-
-        /**
-         *
-         */
-        u32
-        index() const;
-
-        /**
-         *
-         */
-        Item&
-        item();
-
-        /**
-         *
-         */
-        const Item&
-        item() const;
-
-        /**
-         *
-         */
-        bool
-        has_next() const;
-
-        /**
-         *
-         */
-        bool
-        next();
-
-        /**
-         *
-         */
-        void
-        reset();
-
-    private:
-        /**
-         *
-         */
-        const List& m_list;
-
-        /**
-         *
-         */
-        u32 m_index;
-    };
-
-    template <class Item, class Layout>
-    ArrayListForwIter(const ArrayList<Item, Layout>&)
-        -> ArrayListForwIter<Item, Layout>;
 } // namespace lgh
 
 #include <light/Algo/inline/ArrayList.inl>

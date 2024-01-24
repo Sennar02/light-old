@@ -53,12 +53,24 @@ namespace lgh
          *
          */
         Item&
+        find(u32 index);
+
+        /**
+         *
+         */
+        const Item&
         find(u32 index) const;
 
         /**
          *
          */
         Item&
+        operator[](u32 index);
+
+        /**
+         *
+         */
+        const Item&
         operator[](u32 index) const;
 
     protected:
