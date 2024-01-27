@@ -1,6 +1,7 @@
 #ifndef LIGHT_MEMORY_LAYOUT_FIXED_LAYOUT_HPP
 #define LIGHT_MEMORY_LAYOUT_FIXED_LAYOUT_HPP
 
+#include <light/Memory/util.hpp>
 #include <light/Memory/Origin/BaseOrigin.hpp>
 
 namespace lgh

@@ -65,6 +65,8 @@ namespace lgh
     static const u32 g_len_f32 = sizeof(f32);
     static const u32 g_len_f64 = sizeof(f64);
 
+    static const u32 g_bits = 8u;
+
     template <class Item, class Fail>
     class Result;
 

@@ -84,8 +84,8 @@ namespace lgh
         if ( is_empty() ) return *this;
 
         while ( iter.has_next(m_count) ) {
-            index = next(m_delta, iter.next(m_count));
-            item  = &m_array[index];
+            index = iter.next(m_count);
+            item  = &m_array[next(m_delta, index)];
 
             func(*item, index);
         }

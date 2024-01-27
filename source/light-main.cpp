@@ -1,78 +1,58 @@
-#include <light/Algo/import.hpp>
-#include <time.h>
+#include <light/Engine/import.hpp>
 #include <stdio.h>
 
 using namespace lgh;
 
-template <class Item, class Layout>
-void
-print_table(const HashTable<Item, Layout>& table)
+class MainState
+    : public State
 {
-    auto& heads = table.heads();
-    auto& array = table.array();
+public:
+    MainState()
+        : m_window {}
+    { }
 
-    for ( u32 i = 0; i < heads.length(); i++ ) {
-        if ( heads[i].dist != 0 ) {
-            if ( heads[i].link == heads[array[heads[i].link].link].link )
-                printf("%3u. \x1b[34mdist %3u, link %3u\x1b[0m ",
-                    i,
-                    heads[i].dist,
-                    heads[i].link);
-            else
-                printf("%3u. \x1b[31mdist %3u, link %3u\x1b[0m ",
-                    i,
-                    heads[i].dist,
-                    heads[i].link);
-        } else
-            printf("%3u. \x1b[33mdist ---, link ---\x1b[0m ", i);
-
-        if ( i < table.count() ) {
-            if ( array[i].link == array[heads[array[i].link].link].link )
-                printf("| \x1b[34mlink %3u, name %3u, item %3u\x1b[0m\n",
-                    array[i].link,
-                    array[i].name,
-                    array[i].item);
-            else
-                printf("| \x1b[31mlink %3u, name %3u, item %3u\x1b[0m\n",
-                    array[i].link,
-                    array[i].name,
-                    array[i].item);
-        } else
-            printf("| \x1b[33mlink ---, name ---, item ---\x1b[0m\n");
+    void
+    start()
+    {
+        m_window.create(sf::VideoMode {1280, 720}, "Light");
     }
-}
 
-static const u32 g_count = 48u;
+    void
+    clean()
+    {
+        m_window.close();
+    }
+
+    bool
+    input()
+    {
+        sf::Event event;
+
+        while ( m_window.pollEvent(event) ) {
+            if ( event.type == sf::Event::Closed )
+                return false;
+
+            if ( event.type == sf::Event::KeyReleased ) {
+                if ( event.key.code == sf::Keyboard::Escape )
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+private:
+    sf::RenderWindow m_window;
+};
 
 int
 main(int, const char*[])
 {
-    HashTable<u32, u32> table;
+    Engine    engine;
+    MainState title;
 
-    Array<HashHead>           heads = {g_origin, g_count * 2u};
-    Array<HashBody<u32, u32>> array = {g_origin, g_count};
-
-    if ( table.build(heads, array) == false )
-        return 1;
-
-    srand(time(0));
-
-    for ( u32 i = 0; i < g_count * 1.5f; i++ ) {
-        u32 name = i; // rand() % (g_count * 3u);
-        u32 item = rand() % (g_count * 3u);
-
-        table.insert(name, item);
-    }
-
-    auto func = [](const auto& table) {
-        table.for_each(BackIterator {}, [](const u32& item, const u32& name) {
-            printf("%3u := %3u\n", name, item);
-        });
-    };
-
-    // print_table(table);
-
-    func(table);
+    engine.program("MainState", title);
+    engine.execute("MainState");
 
     return 0;
 }

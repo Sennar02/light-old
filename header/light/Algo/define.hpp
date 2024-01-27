@@ -11,11 +11,13 @@ namespace lgh
         {
             NotEnoughSpace,
             NameRepetition,
+            InvalidElement,
         };
 
         static const char* const g_insert[] = {
             "Insert::NotEnoughSpace",
             "Insert::NameRepetition",
+            "Insert::InvalidElement",
         };
 
         enum Remove

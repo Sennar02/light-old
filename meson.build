@@ -15,6 +15,7 @@ light_define = []
 subdir('source/light/Base')
 subdir('source/light/Memory')
 subdir('source/light/Algo')
+subdir('source/light/Engine')
 
 executable('light-main',
     sources: [
@@ -23,18 +24,6 @@ executable('light-main',
     include_directories: [light_header],
     dependencies:        [light_depend,
         dependency('sfml-graphics'),
-    ],
-    link_with:           [light_define],
-    link_args:           ['-lm'],
-)
-
-executable('light-test',
-    sources: [
-        'source/light-test.cpp',
-    ],
-    include_directories: [light_header],
-    dependencies:        [light_depend,
-        dependency('cpputest'),
     ],
     link_with:           [light_define],
     link_args:           ['-lm'],

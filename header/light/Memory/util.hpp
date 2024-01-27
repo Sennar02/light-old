@@ -5,6 +5,10 @@
 
 namespace lgh
 {
+    template <class Origin>
+    char*
+    acquire(Origin& origin, u32 length, u8 align = g_len_u32);
+
     /**
      *
      */
@@ -17,5 +21,7 @@ namespace lgh
     bool
     is_power_of_two(u8 align);
 } // namespace lgh
+
+#include <light/Memory/inline/util.inl>
 
 #endif // LIGHT_MEMORY_UTIL_HPP

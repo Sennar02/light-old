@@ -63,9 +63,9 @@ namespace lgh
     Option<u32>
     HashTable<Name, Item, Layout>::index_of(const Name& name) const
     {
-        u32   hash = code(name);
-        Head* iter = 0;
-        Body* pair = 0;
+        u32         hash = code(name);
+        const Head* iter = 0;
+        const Body* pair = 0;
 
         if ( is_empty() ) return {};
 
@@ -73,7 +73,9 @@ namespace lgh
             iter = &m_heads[i];
             pair = &m_array[iter->link];
 
-            if ( iter->dist != 0 && iter->hash == hash ) {
+            if ( iter->dist == 0 ) break;
+
+            if ( iter->hash == hash ) {
                 if ( Equals<Name>::equals(pair->name, name) )
                     return i;
             }
@@ -243,16 +245,18 @@ namespace lgh
 
     template <class Name, class Item, class Layout>
     Result<Item, fail::Remove>
-    HashTable<Name, Item, Layout>::remove(const Name&)
+    HashTable<Name, Item, Layout>::remove(const Name& name)
     {
-        // u32 index = index_of(name);
+        auto option = index_of(name);
+        u32  index  = option.item();
 
-        // if ( index < m_array.length() )
-        //     m_array[index].dist = 0;
-        // else
-        //     return fail::UnknownElement;
-
-        // return m_array[index].item;
+        if ( option.is_item() ) {
+            if ( index < m_heads.length() ) {
+                // scambiare:  array[heads[index].link] <-> array[count]
+                // eliminare:  heads[index] <- 0
+                // correggere: heads[array[count].link].link <- index
+            }
+        }
 
         return fail::UnknownElement;
     }

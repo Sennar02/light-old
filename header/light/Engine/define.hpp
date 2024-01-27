@@ -5,13 +5,9 @@
 
 namespace lgh
 {
+    class State;
+    class StateMachine;
     class Engine;
-
-    template <class Type>
-    class EntityFactory;
-
-    template <class Type>
-    class EntityInfo;
 } // namespace lgh
 
 #endif // LIGHT_ENGINE_DEFINE_HPP
