@@ -2,8 +2,6 @@
 
 namespace lgh
 {
-    ArenaOrigin g_origin = {calloc(1u, g_KiB * 256u), g_KiB * 256u};
-
     ArenaOrigin::ArenaOrigin()
         : BaseOrigin()
         , m_border {0}

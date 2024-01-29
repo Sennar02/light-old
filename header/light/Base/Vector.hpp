@@ -34,7 +34,13 @@ namespace lgh
         /**
          *
          */
-        Type
+        Type&
+        operator[](u32 index);
+
+        /**
+         *
+         */
+        const Type&
         operator[](u32 index) const;
 
         /**
@@ -92,6 +98,13 @@ namespace lgh
         template <class Othr>
         Vector<Type, Size>
         operator/(const Othr& other) const;
+
+        /**
+         *
+         */
+        template <class Othr>
+        bool
+        operator==(const Vector<Othr, Size>& other) const;
 
     private:
         /**

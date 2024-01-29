@@ -9,6 +9,7 @@
 #include <light/Memory/Origin/ArenaOrigin.hpp>
 #include <light/Memory/Origin/StackOrigin.hpp>
 #include <light/Memory/Origin/EmptyOrigin.hpp>
+#include <light/Memory/Origin/KernOrigin.hpp>
 
 #include <light/Memory/Layout/FixedLayout.hpp>
 

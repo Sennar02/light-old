@@ -21,19 +21,23 @@ namespace lgh
         sf::Time slice = sf::seconds(1.f / frames);
         sf::Time delta = g_clock.restart();
 
-        if ( start(name) == 0 ) return false;
+        if ( m_machine.table().contains(name) == false )
+            return false;
+
+        m_state = start(name);
 
         while ( m_state != 0 ) {
             delta += g_clock.restart();
 
-            if ( input() != 0 ) {
-                for ( ; delta > slice; delta -= slice )
-                    fixed_step(slice.asSeconds());
+            if ( input() == 0 ) break;
 
-                after_step();
-            } else
-                clean();
+            for ( ; delta >= slice; delta -= slice )
+                fixed_step(slice.asSeconds());
+
+            after_step();
         }
+
+        clean();
 
         return true;
     }
@@ -46,9 +50,8 @@ namespace lgh
         };
 
         m_machine.table().for_each(func);
-        m_state = m_machine.launch(name);
 
-        return m_state;
+        return m_machine.launch(name);
     }
 
     void

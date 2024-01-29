@@ -6,7 +6,8 @@ namespace lgh
     char*
     acquire(Origin& origin, u32 length, u8 align)
     {
-        auto result = origin.acquire(length, align);
+        auto  result = origin.acquire(length, align);
+        char* memory = 0;
 
         if ( result.is_item() )
             return result.item();
@@ -16,6 +17,8 @@ namespace lgh
             fail::g_acquire[result.fail()]);
         // clang-format on
 
-        exit(EXIT_FAILURE);
+        *memory = 0;
+
+        return memory;
     }
 } // namespace lgh

@@ -14,6 +14,7 @@ namespace lgh
     class ArenaOrigin;
     class StackOrigin;
     class EmptyOrigin;
+    class KernOrigin;
 
     namespace fail
     {
@@ -73,7 +74,7 @@ namespace lgh
     static const u32 g_MB = g_KB * g_KB;
     static const u32 g_GB = g_MB * g_KB;
 
-    extern ArenaOrigin g_origin;
+    extern KernOrigin g_origin;
 } // namespace lgh
 
 #endif // LIGHT_MEMORY_DEFINE_HPP
