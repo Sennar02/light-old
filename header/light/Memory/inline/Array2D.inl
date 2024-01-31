@@ -91,7 +91,7 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
-    Array2D<Item, Layout>::find(Vector2u index)
+    Array2D<Item, Layout>::find(Vec2u index)
     {
         auto& self  = *(Array<Item, Layout>*) this;
         u32   value = index[1] * m_width + index[0];
@@ -101,7 +101,7 @@ namespace lgh
 
     template <class Item, class Layout>
     const Item&
-    Array2D<Item, Layout>::find(Vector2u index) const
+    Array2D<Item, Layout>::find(Vec2u index) const
     {
         auto& self  = *(Array<Item, Layout>*) this;
         u32   value = index[1] * m_width + index[0];
@@ -129,7 +129,7 @@ namespace lgh
 
     template <class Item, class Layout>
     Item&
-    Array2D<Item, Layout>::operator[](Vector2u index)
+    Array2D<Item, Layout>::operator[](Vec2u index)
     {
         auto& self  = *(Array<Item, Layout>*) this;
         u32   value = index[1] * m_width + index[0];
@@ -139,7 +139,7 @@ namespace lgh
 
     template <class Item, class Layout>
     const Item&
-    Array2D<Item, Layout>::operator[](Vector2u index) const
+    Array2D<Item, Layout>::operator[](Vec2u index) const
     {
         auto& self  = *(Array<Item, Layout>*) this;
         u32   value = index[1] * m_width + index[0];

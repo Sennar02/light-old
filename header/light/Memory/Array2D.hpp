@@ -72,13 +72,13 @@ namespace lgh
          *
          */
         Item&
-        find(Vector2u index);
+        find(Vec2u index);
 
         /**
          *
          */
         const Item&
-        find(Vector2u index) const;
+        find(Vec2u index) const;
 
         /**
          *
@@ -96,13 +96,13 @@ namespace lgh
          *
          */
         Item&
-        operator[](Vector2u index);
+        operator[](Vec2u index);
 
         /**
          *
          */
         const Item&
-        operator[](Vector2u index) const;
+        operator[](Vec2u index) const;
 
     protected:
         /**

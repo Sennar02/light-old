@@ -19,18 +19,6 @@ namespace lgh
         virtual ~State() = default;
 
         /**
-         *
-         */
-        void
-        set_next(const String& next);
-
-        /**
-         *
-         */
-        String
-        next() const;
-
-        /**
          * Called once when programming
          * the state machine.
          */
@@ -79,11 +67,11 @@ namespace lgh
         virtual void
         after_step();
 
-    private:
+    public:
         /**
          * Name of the next state.
          */
-        String m_next;
+        String next;
     };
 } // namespace lgh
 

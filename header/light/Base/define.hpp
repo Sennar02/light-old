@@ -20,6 +20,26 @@ namespace lgh
     using f32 = float_t;
     using f64 = double_t;
 
+    static const u32 g_bits = 8u;
+
+    template <class Item, class Fail>
+    class Result;
+
+    template <class Item>
+    class Option;
+
+    template <class Item, u32 Size>
+    class Vector;
+
+    template <class Type>
+    using Vector2D = Vector<Type, 2>;
+
+    using Vec2u = Vector2D<u32>;
+    using Vec2i = Vector2D<i32>;
+    using Vec2f = Vector2D<f32>;
+
+    class String;
+
     static const u8  g_max_u8  = UINT8_MAX;
     static const u16 g_max_u16 = UINT16_MAX;
     static const u32 g_max_u32 = UINT32_MAX;
@@ -64,26 +84,6 @@ namespace lgh
 
     static const u32 g_len_f32 = sizeof(f32);
     static const u32 g_len_f64 = sizeof(f64);
-
-    static const u32 g_bits = 8u;
-
-    template <class Item, class Fail>
-    class Result;
-
-    template <class Item>
-    class Option;
-
-    template <class Item, u32 Size>
-    class Vector;
-
-    template <class Type>
-    using Vector2D = Vector<Type, 2>;
-
-    using Vector2u = Vector2D<u32>;
-    using Vector2i = Vector2D<i32>;
-    using Vector2f = Vector2D<f32>;
-
-    class String;
 } // namespace lgh
 
 // clang-format off

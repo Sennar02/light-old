@@ -19,7 +19,7 @@ namespace lgh
     Engine::execute(const String& name, u32 frames)
     {
         sf::Time slice = sf::seconds(1.f / frames);
-        sf::Time delta = g_clock.restart();
+        sf::Time delta;
 
         if ( m_machine.table().contains(name) == false )
             return false;
@@ -27,14 +27,14 @@ namespace lgh
         m_state = start(name);
 
         while ( m_state != 0 ) {
-            delta += g_clock.restart();
-
             if ( input() == 0 ) break;
 
             for ( ; delta >= slice; delta -= slice )
                 fixed_step(slice.asSeconds());
 
             after_step();
+
+            delta += g_clock.restart();
         }
 
         clean();
@@ -67,10 +67,11 @@ namespace lgh
     State*
     Engine::input()
     {
-        String next = m_state->next();
+        String next = m_state->next;
 
         if ( m_state->input() == false ) {
-            m_state->set_next("");
+            m_state->next = "";
+
             m_state =
                 m_machine.launch(next);
         }

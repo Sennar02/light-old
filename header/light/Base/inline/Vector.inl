@@ -4,7 +4,7 @@ namespace lgh
 {
     template <class Type, u32 Size>
     Vector<Type, Size>::Vector()
-        : m_data {}
+        : m_data {0}
     { }
 
     template <class Type, u32 Size>
@@ -14,11 +14,40 @@ namespace lgh
     { }
 
     template <class Type, u32 Size>
-    Vector<Type, Size>::Vector(const Type& value)
-        : m_data {}
+    Vector<Type, Size>
+    Vector<Type, Size>::absolute() const
     {
+        Vector<Type, Size> other;
+
         for ( u32 i = 0; i < s_size; i++ )
-            m_data[i] = value;
+            other.m_data[i] = abs(m_data[i]);
+
+        return other;
+    }
+
+    template <class Type, u32 Size>
+    Vector<Type, Size>
+    Vector<Type, Size>::normal() const
+    {
+        Vector<Type, Size> other;
+        Type               value = strength();
+
+        for ( u32 i = 0; i < s_size; i++ )
+            other.m_data[i] = m_data[i] / value;
+
+        return other;
+    }
+
+    template <class Type, u32 Size>
+    Type
+    Vector<Type, Size>::strength() const
+    {
+        Type value = 0;
+
+        for ( u32 i = 0; i < s_size; i++ )
+            value += m_data[i] * m_data[i];
+
+        return sqrt(value);
     }
 
     template <class Type, u32 Size>
@@ -150,5 +179,18 @@ namespace lgh
         }
 
         return true;
+    }
+
+    template <class Type, u32 Size>
+    template <class Othr>
+    bool
+    Vector<Type, Size>::operator!=(const Vector<Othr, Size>& other) const
+    {
+        for ( u32 i = 0; i < s_size; i++ ) {
+            if ( m_data[i] != other.m_data[i] )
+                return true;
+        }
+
+        return false;
     }
 } // namespace lgh

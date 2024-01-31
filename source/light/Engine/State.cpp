@@ -3,20 +3,8 @@
 namespace lgh
 {
     State::State()
-        : m_next {}
+        : next {}
     { }
-
-    void
-    State::set_next(const String& next)
-    {
-        m_next = next;
-    }
-
-    String
-    State::next() const
-    {
-        return m_next;
-    }
 
     bool
     State::attach()

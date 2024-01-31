@@ -5,6 +5,18 @@
 
 namespace lgh
 {
+    template <class Item, class Layout>
+    class ArrayList;
+
+    template <class Item, class Layout>
+    class ArrayDeque;
+
+    template <class Name, class Item, class Layout>
+    class HashTable;
+
+    class ForwIterator;
+    class BackIterator;
+
     namespace fail
     {
         enum Insert
@@ -31,18 +43,6 @@ namespace lgh
             "Remove::AlreadyRemoved",
         };
     } // namespace fail
-
-    template <class Item, class Layout>
-    class ArrayList;
-
-    template <class Item, class Layout>
-    class ArrayDeque;
-
-    template <class Name, class Item, class Layout>
-    class HashTable;
-
-    class ForwIterator;
-    class BackIterator;
 } // namespace lgh
 
 #endif // LIGHT_ALGO_DEFINE_HPP

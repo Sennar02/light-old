@@ -29,7 +29,20 @@ namespace lgh
         /**
          *
          */
-        Vector(const Type& value);
+        Vector<Type, Size>
+        absolute() const;
+
+        /**
+         *
+         */
+        Vector<Type, Size>
+        normal() const;
+
+        /**
+         *
+         */
+        Type
+        strength() const;
 
         /**
          *
@@ -105,6 +118,13 @@ namespace lgh
         template <class Othr>
         bool
         operator==(const Vector<Othr, Size>& other) const;
+
+        /**
+         *
+         */
+        template <class Othr>
+        bool
+        operator!=(const Vector<Othr, Size>& other) const;
 
     private:
         /**
