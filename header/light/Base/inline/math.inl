@@ -6,7 +6,7 @@ namespace lgh
     constexpr Type
     max(Type value, Else other)
     {
-        if ( value < other )
+        if ( value < (Type) other )
             return other;
 
         return value;
@@ -16,7 +16,7 @@ namespace lgh
     constexpr Type
     min(Type value, Else other)
     {
-        if ( other < value )
+        if ( (Type) other < value )
             return other;
 
         return value;
@@ -26,17 +26,17 @@ namespace lgh
     constexpr Type
     floor(Type value, Else other)
     {
-        return value / other;
+        return value / (Type) other;
     }
 
     template <class Type, class Else>
     constexpr Type
     ceil(Type value, Else other)
     {
-        if ( value % other != 0 )
-            return value / other + 1;
+        if ( value % (Type) other != 0 )
+            return value / (Type) other + 1;
 
-        return value / other;
+        return value / (Type) other;
     }
 
     template <class Type>

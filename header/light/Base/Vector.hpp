@@ -29,6 +29,12 @@ namespace lgh
         /**
          *
          */
+        template <class Othr>
+        Vector(const Vector<Othr, Size>& other);
+
+        /**
+         *
+         */
         Vector<Type, Size>
         absolute() const;
 

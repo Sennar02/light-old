@@ -32,11 +32,25 @@ namespace lgh
     class Vector;
 
     template <class Type>
-    using Vector2D = Vector<Type, 2>;
+    using Vector2D = Vector<Type, 2u>;
 
     using Vec2u = Vector2D<u32>;
     using Vec2i = Vector2D<i32>;
     using Vec2f = Vector2D<f32>;
+
+    template <class Type>
+    using Vector3D = Vector<Type, 3u>;
+
+    using Vec3u = Vector3D<u32>;
+    using Vec3i = Vector3D<i32>;
+    using Vec3f = Vector3D<f32>;
+
+    template <class Type>
+    using Vector4D = Vector<Type, 4u>;
+
+    using Vec4u = Vector4D<u32>;
+    using Vec4i = Vector4D<i32>;
+    using Vec4f = Vector4D<f32>;
 
     class String;
 

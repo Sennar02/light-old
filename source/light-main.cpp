@@ -3,14 +3,14 @@
 
 using namespace lgh;
 
-static const u32 g_tile_size = 96u;              // pixels.
-static const u32 g_tile_half = g_tile_size / 2u; // pixels.
+static const u32   g_tile_size   = 48u;        // pixels.
+static const Vec2u g_window_size = {32u, 18u}; // tiles.
+static const Vec2u g_camera_size = {9u, 9u};   // tiles.
+static const Vec2u g_world_size  = {16u, 16u}; // tiles.
 
-static const Vec2u g_window_size = {16u, 9u};          // tiles.
+static const u32   g_tile_half   = g_tile_size / 2u;   // pixels.
 static const Vec2u g_window_half = g_window_size / 2u; // tiles.
-static const Vec2u g_camera_size = {16u, 9u};          // tiles.
 static const Vec2u g_camera_half = g_camera_size / 2u; // tiles.
-static const Vec2u g_world_size  = {50u, 50u};         // tiles.
 
 static const u32 g_world_area = g_world_size[0] * g_world_size[1];
 
@@ -20,6 +20,26 @@ static const sf::Color g_colors[g_colors_size] = {
     {255u,    0,   0},
     {255u, 255u,   0},
     {255u,  96u, 32u},
+};
+
+static bool g_auto_play = false;
+
+struct Camera
+{
+    Vec2f follow;
+    Vec2f offset;
+
+    Vec2f
+    origin() const
+    {
+        return follow - offset;
+    }
+
+    Vec2f
+    finish() const
+    {
+        return follow + offset;
+    }
 };
 
 struct Movement
@@ -56,60 +76,88 @@ struct Movement
     bool moving = false;
 };
 
-void
-movement(f32 delta, Vec2f orient, Movement& entity)
+static void
+move(f32 delta, Vec2f orient, Movement& self)
 {
     Vec2f distance;
     Vec2f movement;
 
-    if ( entity.moving ) {
-        distance = (entity.target - entity.position).absolute();
-        movement = entity.orient * entity.speed * delta;
+    if ( self.moving ) {
+        movement = self.orient * self.speed * delta;
+        distance = self.target - self.position;
 
         for ( u32 i = 0; i < movement.s_size; i++ ) {
-            if ( abs(movement[i]) > distance[i] )
-                entity.position[i] = entity.target[i];
+            if ( abs(movement[i]) > abs(distance[i]) )
+                self.position[i] = self.target[i];
             else
-                entity.position[i] += movement[i];
+                self.position[i] += movement[i];
         }
 
-        if ( entity.position == entity.target )
-            entity.moving = false;
+        if ( self.position == self.target )
+            self.moving = false;
     } else {
-        if ( orient[0] != 0 || orient[1] != 0 ) {
-            entity.target = entity.position + (orient * g_tile_size);
-            entity.orient = orient;
-            entity.moving = true;
-
-            entity.speed = entity.speed_max / orient.strength();
+        if ( orient != Vec2u {} ) {
+            self.target = self.position + (orient * g_tile_size);
+            self.speed  = self.speed_max / orient.strength();
+            self.orient = orient;
+            self.moving = true;
         }
     }
 }
 
-struct Camera
+struct Drawable
+    : public Movement
 {
-    /**
-     * Where the camera looks.
-     */
-    Vec2f target;
-
-    /**
-     * The distance from the target.
-     *
-     * This could be used to center
-     * the target by setting a positive
-     * offset of g_vport_half.
-     */
-    Vec2f offset;
-
-    /**
-     * Limits the camera shouldn't cross.
-     */
-    Vec2f border;
+    sf::Color color;
 };
 
+void
+draw(sf::RectangleShape& rect, sf::RenderTarget& render, const Camera& camera, const Drawable& self)
+{
+    Vec2f origin = camera.origin();
+    Vec2u offset = (g_window_half - g_camera_half) * g_tile_size;
+
+    rect.setFillColor(self.color);
+    rect.setPosition({
+        self.position[0] - origin[0] + offset[0],
+        self.position[1] - origin[1] + offset[1],
+    });
+
+    render.draw(rect);
+}
+
+void
+draw(sf::RectangleShape& rect, sf::RenderTarget& render, const Camera& camera, const Array2D<u32>& world)
+{
+    Vec2f origin = camera.origin();
+    Vec2f finish = camera.finish();
+    Vec2u offset = (g_window_half - g_camera_half) * g_tile_size;
+    u32   tile;
+
+    Vec4u bounds = {
+        max(floor(origin[0] / g_tile_size) - 1.f, 0),
+        min(ceil(finish[0] / g_tile_size) + 1.f, g_world_size[0]),
+        max(floor(origin[1] / g_tile_size) - 1.f, 0),
+        min(ceil(finish[1] / g_tile_size) + 1.f, g_world_size[1]),
+    };
+
+    for ( u32 i = bounds[2]; i < bounds[3]; i++ ) {
+        for ( u32 j = bounds[0]; j < bounds[1]; j++ ) {
+            tile = world[Vec2u {j, i}];
+
+            rect.setFillColor(g_colors[tile]);
+            rect.setPosition({
+                j * g_tile_size - origin[0] + offset[0],
+                i * g_tile_size - origin[1] + offset[1],
+            });
+
+            render.draw(rect);
+        }
+    }
+}
+
 struct Entity
-    : public Movement
+    : public Drawable
 { };
 
 class MainState
@@ -118,11 +166,14 @@ class MainState
 public:
     MainState()
         : m_window {}
-        , m_actors {g_origin, 10u}
-        , m_player {}
+        , m_rect {}
+        , m_player {0}
         , m_camera {}
+        , m_actors {g_origin, 10u}
         , m_world {g_origin, g_world_area, g_world_size[0]}
-    { }
+    {
+        m_rect.setSize({g_tile_size, g_tile_size});
+    }
 
     void
     start()
@@ -137,8 +188,8 @@ public:
 
         m_window.create(mode, "Light");
 
-        m_player.speed_max = 15.f * g_tile_size;
-        m_player.position  = Vec2f {0, 0} * g_tile_size;
+        m_actors[m_player].speed_max = 10.f * g_tile_size;
+        m_actors[m_player].color     = sf::Color::White;
 
         for ( u32 i = 0; i < m_actors.length(); i++ ) {
             m_actors[i].position = {
@@ -146,18 +197,18 @@ public:
                 rand() % g_world_size[1] * g_tile_size,
             };
 
-            m_actors[i].speed_max = rand() % 10u * g_tile_size * 1.f;
+            if ( m_player == i && g_auto_play == false ) continue;
+
+            m_actors[i].speed_max = (rand() % 6u + 2u) * g_tile_size;
+            m_actors[i].color     = sf::Color {
+                (u8) (rand() % 256u),
+                (u8) (rand() % 256u),
+                (u8) (rand() % 256u),
+            };
         }
 
-        m_camera.target = m_player.position;
-        m_camera.border = {
-            g_camera_size[0] * g_tile_size,
-            g_camera_size[1] * g_tile_size,
-        };
-        m_camera.offset = {
-            g_camera_half[0] * g_tile_size,
-            g_camera_half[1] * g_tile_size,
-        };
+        m_camera.follow = m_actors[m_player].position + g_tile_half;
+        m_camera.offset = g_camera_half * g_tile_size;
     }
 
     void
@@ -199,18 +250,24 @@ public:
             sf::Keyboard::isKeyPressed(S) - sf::Keyboard::isKeyPressed(W),
         };
 
-        target = m_player.position + orient * g_tile_size;
+        target = m_actors[m_player].position + orient * g_tile_size;
 
         for ( u32 i = 0; i < target.s_size; i++ ) {
             if ( target[i] < 0 || target[i] >= g_world_size[i] * g_tile_size )
                 orient[i] = 0;
         }
 
-        movement(delta, orient, m_player);
-        m_camera.target = m_player.position;
+        move(delta, orient, m_actors[m_player]);
+        m_camera.follow = m_actors[m_player].position + g_tile_half;
 
         for ( u32 i = 0; i < m_actors.length(); i++ ) {
-            orient = {rand() % 3u - 1.f, rand() % 3u - 1.f};
+            orient = m_actors[i].orient;
+
+            if ( m_player == i && g_auto_play == false ) continue;
+
+            if ( rand() % 10 == 0 )
+                orient = {rand() % 3u - 1.f, rand() % 3u - 1.f};
+
             target = m_actors[i].position + orient * g_tile_size;
 
             for ( u32 i = 0; i < target.s_size; i++ ) {
@@ -218,75 +275,42 @@ public:
                     orient[i] = 0;
             }
 
-            movement(delta, orient, m_actors[i]);
+            move(delta, orient, m_actors[i]);
         }
     }
 
     void
     after_step()
     {
-        sf::RectangleShape rect;
-
-        rect.setSize({g_tile_size, g_tile_size});
-
-        Vec2u base = {
-            (u32) max((i32) ceil((m_camera.target[0] - m_camera.offset[0]) / g_tile_size) - 1, 0),
-            (u32) max((i32) ceil((m_camera.target[1] - m_camera.offset[1]) / g_tile_size) - 1, 0),
-        };
-
-        Vec2u stop = {
-            min((i32) ceil((m_camera.target[0] + m_camera.offset[0]) / g_tile_size) + 1, (i32) g_world_size[0]),
-            min((i32) ceil((m_camera.target[1] + m_camera.offset[1]) / g_tile_size) + 1, (i32) g_world_size[1]),
-        };
-
         m_window.clear();
 
-        for ( u32 i = base[1]; i < stop[1]; i++ ) {
-            for ( u32 j = base[0]; j < stop[0]; j++ ) {
-                rect.setFillColor(g_colors[m_world[{j, i}]]);
-                rect.setPosition({
-                    j * g_tile_size - m_camera.target[0] + m_camera.offset[0],
-                    i * g_tile_size - m_camera.target[1] + m_camera.offset[1],
-                });
+        draw(m_rect, m_window, m_camera, m_world);
 
-                m_window.draw(rect);
-            }
-        }
-
-        rect.setFillColor(sf::Color::Blue);
-        rect.setPosition({
-            m_player.position[0] - m_camera.target[0] + m_camera.offset[0],
-            m_player.position[1] - m_camera.target[1] + m_camera.offset[1],
-        });
-
-        m_window.draw(rect);
-
-        for ( u32 i = 0; i < m_actors.length(); i++ ) {
-            rect.setFillColor(sf::Color::Cyan);
-            rect.setPosition({
-                m_actors[i].position[0] - m_camera.target[0] + m_camera.offset[0],
-                m_actors[i].position[1] - m_camera.target[1] + m_camera.offset[1],
-            });
-
-            m_window.draw(rect);
-        }
+        for ( u32 i = 0; i < m_actors.length(); i++ )
+            draw(m_rect, m_window, m_camera, m_actors[i]);
 
         m_window.display();
     }
 
 private:
-    sf::RenderWindow m_window;
-    Array<Entity>    m_actors;
-    Entity           m_player;
-    Camera           m_camera;
-    Array2D<u32>     m_world;
+    sf::RenderWindow   m_window;
+    sf::RectangleShape m_rect;
+    u32                m_player;
+    Camera             m_camera;
+    Array<Entity>      m_actors;
+    Array2D<u32>       m_world;
 };
 
 int
-main(int, const char*[])
+main(int argc, const char* argv[])
 {
     Engine    engine;
     MainState state;
+
+    srand(time(0));
+
+    if ( argc == 2 && strncmp(argv[1], "--autoplay", 11u) == 0 )
+        g_auto_play = true;
 
     engine.program("MainState", state);
 
@@ -295,3 +319,70 @@ main(int, const char*[])
 
     return 1;
 }
+
+
+
+// #include <light/Engine/import.hpp>
+
+// namespace lgh
+// {
+//     using Color    = Vector3D<u8>;
+//     using Position = Vec2f;
+
+//     struct Velocity
+//     {
+//         f32 value;
+//         f32 limit;
+//     };
+
+//     struct Movement
+//     {
+//         Vec2f destin;
+//         Vec2f orient;
+//         bool  moving;
+//     };
+
+//     struct MovementSystem
+//     {
+//         static const u32 s_unit = 1u;
+
+//         static void
+//         udpate(Movement& movement, Velocity& velocity, Position& position, Vec2f orient, f32 step)
+//         {
+//             Vec2f dist;
+//             Vec2f incr;
+
+//             if ( movement.moving == false ) {
+//                 if ( orient != Vec2u {} ) {
+//                     velocity.value = velocity.limit / orient.strength();
+
+//                     movement.destin = position + (orient * s_unit);
+//                     movement.orient = orient;
+//                     movement.moving = true;
+//                 }
+//             } else {
+//                 incr = movement.orient * velocity.value * step;
+//                 dist = movement.destin - position;
+
+//                 for ( u32 i = 0; i < position.s_size; i++ ) {
+//                     position[i] += incr[i];
+
+//                     if ( abs(dist[i]) < abs(incr[i]) )
+//                         position[i] = movement.destin[i];
+//                 }
+
+//                 if ( position == movement.destin )
+//                     movement.moving = false;
+//             }
+//         }
+//     };
+
+//     struct DrawingSystem
+//     {
+//         static void
+//         update(Position& position, Color& color, sf::RenderTarget& render)
+//         {
+//             sf::RectangleShape
+//         }
+//     };
+// } // namespace lgh

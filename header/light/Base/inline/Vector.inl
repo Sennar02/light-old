@@ -14,6 +14,15 @@ namespace lgh
     { }
 
     template <class Type, u32 Size>
+    template <class Othr>
+    Vector<Type, Size>::Vector(const Vector<Othr, Size>& other)
+        : m_data {0}
+    {
+        for ( u32 i = 0; i < s_size; i++ )
+            m_data[i] = other[i];
+    }
+
+    template <class Type, u32 Size>
     Vector<Type, Size>
     Vector<Type, Size>::absolute() const
     {
@@ -174,7 +183,7 @@ namespace lgh
     Vector<Type, Size>::operator==(const Vector<Othr, Size>& other) const
     {
         for ( u32 i = 0; i < s_size; i++ ) {
-            if ( m_data[i] != other.m_data[i] )
+            if ( m_data[i] != other[i] )
                 return false;
         }
 
@@ -187,7 +196,7 @@ namespace lgh
     Vector<Type, Size>::operator!=(const Vector<Othr, Size>& other) const
     {
         for ( u32 i = 0; i < s_size; i++ ) {
-            if ( m_data[i] != other.m_data[i] )
+            if ( m_data[i] != other[i] )
                 return true;
         }
 
